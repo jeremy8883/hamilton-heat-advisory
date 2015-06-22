@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">HamiltonHeatAlert</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="cityOfHamiltonHeatAdvisory">City of Hamilton Heat Advisory</string>
+    <string name="currentStatus">Current status</string>
+    <string name="advisoryStatusUnknown">Unknown</string>
+</resources>
