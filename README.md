@@ -1,4 +1,4 @@
-# Hamilton Heat Advisory
+# Hamilton Heat Alert
 
 Android application for fetching the Hamilton Ontario heat advisory warnings and displaying a notification when the alert value is above 0.
 
