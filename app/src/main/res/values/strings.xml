@@ -3,6 +3,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="cityOfHamiltonHeatAdvisory">City of Hamilton Heat Advisory</string>
-    <string name="currentStatus">Current status</string>
+    <string name="currentStatus">Current status:</string>
     <string name="advisoryStatusUnknown">Unknown</string>
+    <string name="heatAdvisoryFetchError">There was a problem fetching the heat advisory data</string>
+    <string name="advisoryStatusChecking">Checking...</string>
 </resources>

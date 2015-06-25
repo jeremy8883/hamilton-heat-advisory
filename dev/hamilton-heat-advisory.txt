@@ -1,0 +1,7 @@
+- Fetch and display xml data
+- Use RX Android
+- Use google cloud for notifications
+- Create icons
+- Error handling - show bar at top, show error if no internet for a while
+- Lay out the data a little nicer
+- Cache results on rotate etc
