@@ -1,7 +1,10 @@
-- Fetch and display xml data
 - Use RX Android
+- Fix tests
+- Use app compat
+- Log when alerts are displayed and ensure notifications are not shown multiple times in one day
 - Use google cloud for notifications
-- Create icons
-- Error handling - show bar at top, show error if no internet for a while
+- Error handling - make text red, show error if no internet for a while
 - Lay out the data a little nicer
-- Cache results on rotate etc
+- Cache results for on rotate
+- Automatically subbscribe to notifications once app is installed
+- Have checkbox to turn notifications off

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import net.jeremycasey.hamiltonheatalert.R;
+import net.jeremycasey.hamiltonheatalert.heatadvisory.AdvisoryNotification;
 import net.jeremycasey.hamiltonheatalert.heatadvisory.HeatAdvisory;
 import net.jeremycasey.hamiltonheatalert.heatadvisory.HeatAdvisoryFetcher;
 
@@ -93,6 +94,10 @@ public class MainActivityFragment extends Fragment {
 
     private void displayHeatAdvisoryInfo(HeatAdvisory heatAdvisory) {
         mAdvisoryStatus.setText(heatAdvisory.getStageText());
+        AdvisoryNotification advisoryNotification = new AdvisoryNotification(heatAdvisory, getActivity());
+        if (advisoryNotification.shouldShowNotification()) {
+            advisoryNotification.showNotification();
+        }
     }
 
     private void showError(String text) {

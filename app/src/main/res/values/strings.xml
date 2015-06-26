@@ -8,4 +8,5 @@
     <string name="advisoryStatusChecking">...</string>
     <string name="refreshButton">Refresh</string>
     <string name="refreshButtonChecking">Checking...</string>
+    <string name="alertContextText">Hamilton Heat Alert</string>
 </resources>
