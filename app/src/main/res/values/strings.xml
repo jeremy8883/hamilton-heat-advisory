@@ -9,4 +9,10 @@
     <string name="refreshButton">Refresh</string>
     <string name="refreshButtonChecking">Checking...</string>
     <string name="alertContextText">Hamilton Heat Alert</string>
+    <string name="errorGooglePlayServicesNotSupported">Your device does not support push notifications.</string>
+    <string name="receivePushNotificationsCheckbox">Receive push notifications</string>
+    <string name="registeringForPushNotificationsNowPleaseWait">Registering for push notifications now. Please wait...</string>
+    <string name="pushAlertsRegistrationFailed">There was a problem registering for push alerts</string>
+    <string name="gcmMessageReceiveError">There was a problem retreiving the latest heat warning</string>
+    <string name="unregisteringPushNotificationsPleaseWait">Unregistering. Please wait...</string>
 </resources>

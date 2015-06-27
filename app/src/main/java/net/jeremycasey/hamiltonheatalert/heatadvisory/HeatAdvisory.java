@@ -2,10 +2,9 @@ package net.jeremycasey.hamiltonheatalert.heatadvisory;
 
 import org.joda.time.DateTime;
 
-/**
- * Created by Jeremy on 25/06/2015.
- */
-public class HeatAdvisory {
+import java.io.Serializable;
+
+public class HeatAdvisory implements Serializable {
 
     private String stageText;
     private int stage;

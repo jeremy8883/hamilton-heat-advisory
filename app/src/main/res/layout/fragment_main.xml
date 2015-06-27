@@ -20,4 +20,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/refreshButton" />
+
+    <CheckBox
+        android:id="@+id/pushAlertsCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/receivePushNotificationsCheckbox" />
+
+    <TextView
+        android:id="@+id/pushAlertsMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:visibility="gone" />
 </LinearLayout>

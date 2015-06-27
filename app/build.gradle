@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "23.0.0 rc2"
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "net.jeremycasey.hamiltonheatalert"
@@ -24,4 +25,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'joda-time:joda-time:2.8.1'
+    compile "com.google.android.gms:play-services:7.5.+"
+
 }

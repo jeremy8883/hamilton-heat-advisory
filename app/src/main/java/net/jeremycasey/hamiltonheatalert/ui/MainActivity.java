@@ -2,14 +2,16 @@ package net.jeremycasey.hamiltonheatalert.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 import net.jeremycasey.hamiltonheatalert.R;
+import net.jeremycasey.hamiltonheatalert.gcm.RegistrationIntentService;
 import net.jeremycasey.hamiltonheatalert.heatadvisory.AdvisoryNotification;
 
 
 public class MainActivity extends ActionBarActivity {
 
-
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,5 @@ public class MainActivity extends ActionBarActivity {
 //        }
 //        return super.onOptionsItemSelected(item);
 //    }
-
-
-
 
 }

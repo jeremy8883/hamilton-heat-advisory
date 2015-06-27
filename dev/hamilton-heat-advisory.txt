@@ -1,4 +1,7 @@
+- Rename the heatadvisory package to heatalert
 - Use RX Android
+- When getting a gcm message, send a broardcast of the response, and maybe use the same mechanism for the manual refresh
+- What happens to the GCM registration when there's an app update?
 - Fix tests
 - Use app compat
 - Log when alerts are displayed and ensure notifications are not shown multiple times in one day
@@ -8,3 +11,4 @@
 - Cache results for on rotate
 - Automatically subbscribe to notifications once app is installed
 - Have checkbox to turn notifications off
+- Checkbox to remember setting if registered or not
