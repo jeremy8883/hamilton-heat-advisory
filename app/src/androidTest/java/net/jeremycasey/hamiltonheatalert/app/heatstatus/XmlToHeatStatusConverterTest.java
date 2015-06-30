@@ -29,13 +29,13 @@
 //                "        </item>\n" +
 //                "    </channel>\n" +
 //                "\t</rss> ";
-//        HeatAdvisory ha = new HeatAdvisory();
+//        HeatStatus ha = new HeatStatus();
 //        ha.setStageText("Monitoring - Stage 0");
 //        ha.setStage(1);
 //        ha.setImageUrl("http://old.hamilton.ca/databases/phcs/heatalert/current1.jpg");
 //        ha.setLastBuildDate(new DateTime(2015, 5, 19, 2, 52, 42)); //TODO: what time zome is this?
 //
-//        assertEquals(new HeatAdvisory(), new XmlToHeatAdvisoryConverter(xml).run());
+//        assertEquals(new HeatStatus(), new XmlToHeatStatusConverter(xml).run());
 //    }
 //
 ////    @Test

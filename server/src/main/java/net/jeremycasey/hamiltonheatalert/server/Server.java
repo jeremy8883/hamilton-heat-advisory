@@ -1,8 +1,8 @@
 package net.jeremycasey.hamiltonheatalert.server;
 
-import net.jeremycasey.hamiltonheatalert.heatadvisory.HeatAdvisory;
-import net.jeremycasey.hamiltonheatalert.heatadvisory.HeatAdvisoryFetcher;
-import net.jeremycasey.hamiltonheatalert.heatadvisory.HeatAdvisoryIsImportantChecker;
+import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
+import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusFetcher;
+import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusIsImportantChecker;
 import net.jeremycasey.hamiltonheatalert.utils.*;
 
 import java.lang.Exception;
@@ -23,9 +23,10 @@ public class Server {
 
     private static void sendManualMessageToGcm(int heatRating) {
         try {
-            HeatAdvisory heatAdvisory = HeatAdvisory.createHeatAdvisory(heatRating);
-            log("Sending alert to gcm for \"" + heatAdvisory.getStageText() + "\"");
-            new GcmSender(heatAdvisory).send();
+            System.out.println(heatRating);
+            HeatStatus heatStatus = HeatStatus.createHeatAdvisory(heatRating);
+            log("Sending custom alert to gcm for \"" + heatStatus.getStageText() + "\"");
+            new GcmSender(heatStatus).send();
             log("Sent");
         } catch (Exception ex) {
             log(StackTrace.toString(ex));
@@ -33,12 +34,14 @@ public class Server {
     }
 
     private static void continuouslyCheckAlertStatusAndSendGcmMessageIfNessesary() {
+        int checkEveryMinutes = 5;
+        log("Watcher started. The hamilton heat alert rss feed will be checked every " + checkEveryMinutes + " minutes.");
         while (true) {
             try {
-                HeatAdvisory heatAdvisory = new HeatAdvisoryFetcher().run();
-                if (new HeatAdvisoryIsImportantChecker(heatAdvisory).isImportant()) {
-                    log("Sending alert to gcm for \"" + heatAdvisory.getStageText() + "\"");
-                    new GcmSender(heatAdvisory).send();
+                HeatStatus heatStatus = new HeatStatusFetcher().run();
+                if (new HeatStatusIsImportantChecker(heatStatus).isImportant()) {
+                    log("Sending alert to gcm for \"" + heatStatus.getStageText() + "\"");
+                    new GcmSender(heatStatus).send();
                     log("Sent");
                 }
             } catch (Exception ex) {
@@ -46,7 +49,7 @@ public class Server {
                 ErrorNotifier.notify(ex);
             }
             try {
-                Thread.sleep((long)(5 * 1000 * 60));
+                Thread.sleep((long)(checkEveryMinutes * 1000 * 60));
             } catch (InterruptedException ex) {
                 log(StackTrace.toString(ex));
             }

@@ -10,16 +10,16 @@ import android.support.v4.app.NotificationCompat;
 
 import net.jeremycasey.hamiltonheatalert.R;
 import net.jeremycasey.hamiltonheatalert.app.ui.MainActivity;
-import net.jeremycasey.hamiltonheatalert.heatadvisory.HeatAdvisory;
+import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 
-public class AdvisoryNotification {
+public class HeatStatusNotification {
     private static final int NOTIFICATION_ID = 1;
-    private HeatAdvisory mHeatAdvisory;
+    private HeatStatus mHeatStatus;
     private Context mContext;
-    private Iterable<? extends HeatAdvisory> notificationsSentInThePastDay;
+    private Iterable<? extends HeatStatus> notificationsSentInThePastDay;
 
-    public AdvisoryNotification(HeatAdvisory heatAdvisory, Context context) {
-        mHeatAdvisory = heatAdvisory;
+    public HeatStatusNotification(HeatStatus heatStatus, Context context) {
+        mHeatStatus = heatStatus;
         mContext = context;
     }
 
@@ -28,10 +28,10 @@ public class AdvisoryNotification {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext)
                 .setSmallIcon(R.drawable.ic_stat_thermometer)
-                .setContentTitle(mHeatAdvisory.getStageText())
+                .setContentTitle(mHeatStatus.getStageText())
                 .setContentText(mContext.getString(R.string.alertContextText))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setTicker(mHeatAdvisory.getStageText())
+                .setTicker(mHeatStatus.getStageText())
                 .setVibrate(new long[] { 500, 500, 500 })
                 .setSound(soundUri);
 

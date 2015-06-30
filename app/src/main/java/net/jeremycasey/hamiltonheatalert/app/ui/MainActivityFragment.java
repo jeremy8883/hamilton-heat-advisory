@@ -24,11 +24,11 @@ import net.jeremycasey.hamiltonheatalert.app.gcm.GcmPreferences;
 import net.jeremycasey.hamiltonheatalert.app.gcm.MyGcmListenerService;
 import net.jeremycasey.hamiltonheatalert.app.gcm.RegistrationIntentService;
 import net.jeremycasey.hamiltonheatalert.app.gcm.UnregistrationIntentService;
-import net.jeremycasey.hamiltonheatalert.app.notifications.AdvisoryNotification;
-import net.jeremycasey.hamiltonheatalert.app.heatadvisory.HeatAdvisoryFetcherAsync;
+import net.jeremycasey.hamiltonheatalert.app.notifications.HeatStatusNotification;
+import net.jeremycasey.hamiltonheatalert.app.heatstatus.HeatStatusFetcherAsync;
 import net.jeremycasey.hamiltonheatalert.app.utils.PreferenceUtil;
-import net.jeremycasey.hamiltonheatalert.heatadvisory.HeatAdvisory;
-import net.jeremycasey.hamiltonheatalert.heatadvisory.HeatAdvisoryIsImportantChecker;
+import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
+import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusIsImportantChecker;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,7 +42,7 @@ import butterknife.OnClick;
 public class MainActivityFragment extends Fragment {
     @Bind(R.id.advisoryStatus) TextView mAdvisoryStatus;
 
-    private HeatAdvisoryFetcherAsync mHeatAdvisoryFetcher = null;
+    private HeatStatusFetcherAsync mHeatAdvisoryFetcher = null;
     @Bind(R.id.refreshButton) Button mRefreshButton;
     @Bind(R.id.pushAlertsMessage) TextView pushAlertsMessage;
     @Bind(R.id.pushAlertsCheckBox) CheckBox pushAlertsCheckBox;
@@ -182,15 +182,15 @@ public class MainActivityFragment extends Fragment {
         if (mHeatAdvisoryFetcher != null) {
             mHeatAdvisoryFetcher.cancel(true);
         }
-        mHeatAdvisoryFetcher = new HeatAdvisoryFetcherAsync(mHeatAdvisoryFetcherListener);
+        mHeatAdvisoryFetcher = new HeatStatusFetcherAsync(mHeatAdvisoryFetcherListener);
         mHeatAdvisoryFetcher.execute();
     }
 
-    private HeatAdvisoryFetcherAsync.FetchListener mHeatAdvisoryFetcherListener = new HeatAdvisoryFetcherAsync.FetchListener() {
+    private HeatStatusFetcherAsync.FetchListener mHeatAdvisoryFetcherListener = new HeatStatusFetcherAsync.FetchListener() {
         @Override
-        public void onFetchComplete(HeatAdvisory heatAdvisory) {
+        public void onFetchComplete(HeatStatus heatStatus) {
             displayAsNoLongerChecking();
-            displayHeatAdvisoryInfo(heatAdvisory);
+            displayHeatAdvisoryInfo(heatStatus);
         }
 
         @Override
@@ -210,11 +210,11 @@ public class MainActivityFragment extends Fragment {
         mRefreshButton.setEnabled(true);
     }
 
-    private void displayHeatAdvisoryInfo(HeatAdvisory heatAdvisory) {
-        mAdvisoryStatus.setText(heatAdvisory.getStageText());
-        AdvisoryNotification advisoryNotification = new AdvisoryNotification(heatAdvisory, getActivity());
-        if (new HeatAdvisoryIsImportantChecker(heatAdvisory).isImportant()) {
-            advisoryNotification.showNotification();
+    private void displayHeatAdvisoryInfo(HeatStatus heatStatus) {
+        mAdvisoryStatus.setText(heatStatus.getStageText());
+        HeatStatusNotification heatStatusNotification = new HeatStatusNotification(heatStatus, getActivity());
+        if (new HeatStatusIsImportantChecker(heatStatus).isImportant()) {
+            heatStatusNotification.showNotification();
         }
     }
 
@@ -240,8 +240,8 @@ public class MainActivityFragment extends Fragment {
             }
             displayAsNoLongerChecking();
             Bundle extras = intent.getExtras();
-            HeatAdvisory heatAdvisory = (HeatAdvisory)extras.getSerializable("heatAdvisory");
-            displayHeatAdvisoryInfo(heatAdvisory);
+            HeatStatus heatStatus = (HeatStatus)extras.getSerializable("heatStatus");
+            displayHeatAdvisoryInfo(heatStatus);
         }
     };
 }

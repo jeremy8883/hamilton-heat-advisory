@@ -1,6 +1,6 @@
 package net.jeremycasey.hamiltonheatalert.server;
 
-import net.jeremycasey.hamiltonheatalert.heatadvisory.HeatAdvisory;
+import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
@@ -18,10 +18,10 @@ import java.net.URL;
 public class GcmSender {
     private static String GCM_SETTINGS_FILE = "gcm-settings.json";
 
-    private HeatAdvisory mHeatAdvisory;
+    private HeatStatus mHeatStatus;
 
-    public GcmSender(HeatAdvisory heatAdvisory) {
-        mHeatAdvisory = heatAdvisory;
+    public GcmSender(HeatStatus heatStatus) {
+        mHeatStatus = heatStatus;
     }
 
     public void send() throws IOException {
@@ -29,7 +29,7 @@ public class GcmSender {
         JSONObject jGcmData = new JSONObject();
         JSONObject jData = new JSONObject();
 
-        String message = new JSONObject(mHeatAdvisory).toString();
+        String message = new JSONObject(mHeatStatus).toString();
 
         jData.put("message", message);
         // Where to send GCM message.

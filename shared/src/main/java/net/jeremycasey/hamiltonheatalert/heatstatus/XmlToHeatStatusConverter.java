@@ -1,4 +1,4 @@
-package net.jeremycasey.hamiltonheatalert.heatadvisory;
+package net.jeremycasey.hamiltonheatalert.heatstatus;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -15,13 +15,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-public class XmlToHeatAdvisoryConverter {
+public class XmlToHeatStatusConverter {
     private String mXml;
-    public XmlToHeatAdvisoryConverter(String xml) {
+    public XmlToHeatStatusConverter(String xml) {
         mXml = xml;
     }
 
-    public HeatAdvisory run() throws ParserConfigurationException, IOException, SAXException {
+    public HeatStatus run() throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
 
@@ -31,7 +31,7 @@ public class XmlToHeatAdvisoryConverter {
         NodeList itemNodes = getFirstInstanceOf(doc.getChildNodes(), "item").getChildNodes();
         NodeList imageNodes = getFirstInstanceOf(doc.getChildNodes(), "image").getChildNodes();
 
-        HeatAdvisory ha = new HeatAdvisory();
+        HeatStatus ha = new HeatStatus();
         ha.setStageText(getValueOf(itemNodes, "stage"));
         ha.setStage(getStageIntFromStageText(ha.getStageText()));
         ha.setImageUrl(getValueOf(imageNodes, "url"));

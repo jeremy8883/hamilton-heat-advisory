@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import net.jeremycasey.hamiltonheatalert.R;
-import net.jeremycasey.hamiltonheatalert.app.notifications.AdvisoryNotification;
+import net.jeremycasey.hamiltonheatalert.app.notifications.HeatStatusNotification;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -16,7 +16,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AdvisoryNotification.hideNotification(this);
+        HeatStatusNotification.hideNotification(this);
     }
 
     @Override

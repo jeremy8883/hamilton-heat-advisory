@@ -1,10 +1,10 @@
-package net.jeremycasey.hamiltonheatalert.heatadvisory;
+package net.jeremycasey.hamiltonheatalert.heatstatus;
 
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
 
-public class HeatAdvisory implements Serializable {
+public class HeatStatus implements Serializable {
 
     private String stageText;
     private int stage;
@@ -44,15 +44,15 @@ public class HeatAdvisory implements Serializable {
         return lastBuildDate;
     }
 
-    public static HeatAdvisory createHeatAdvisory(int stage) {
-        HeatAdvisory heatAdvisory = new HeatAdvisory();
+    public static HeatStatus createHeatAdvisory(int stage) {
+        HeatStatus heatStatus = new HeatStatus();
         String[] stageTexts = new String[] {
             "Monitoring", "Heat Advisory", "Heat Warning", "Extreme Heat Warning"
         };
-        heatAdvisory.setStageText(stageTexts[stage] + " - Stage " + stage);
-        heatAdvisory.setStage(stage);
-        heatAdvisory.setImageUrl("http://old.hamilton.ca/databases/phcs/heatalert/current1.jpg");
-        heatAdvisory.setLastBuildDate(new DateTime().getMillis());
-        return heatAdvisory;
+        heatStatus.setStageText(stageTexts[stage] + " - Stage " + stage);
+        heatStatus.setStage(stage);
+        heatStatus.setImageUrl("http://old.hamilton.ca/databases/phcs/heatalert/current1.jpg");
+        heatStatus.setLastBuildDate(new DateTime().getMillis());
+        return heatStatus;
     }
 }
