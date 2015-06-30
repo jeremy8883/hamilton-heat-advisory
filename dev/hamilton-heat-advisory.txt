@@ -1,5 +1,5 @@
-- Rename the heatadvisory package to heatalert - 5 mint
 - Fix the junit tests - 10 mins
+- Fix single run server task
 - Use RX Android - 2 hrs
 - Log when alerts are displayed and ensure notifications are not shown multiple times in one day - 1 hr
 - Same but with the server app?

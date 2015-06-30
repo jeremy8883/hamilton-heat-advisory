@@ -3,6 +3,7 @@ package net.jeremycasey.hamiltonheatalert.heatstatus;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class HeatStatus implements Serializable {
 
@@ -54,5 +55,18 @@ public class HeatStatus implements Serializable {
         heatStatus.setImageUrl("http://old.hamilton.ca/databases/phcs/heatalert/current1.jpg");
         heatStatus.setLastBuildDate(new DateTime().getMillis());
         return heatStatus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        HeatStatus hs = (HeatStatus)o;
+        return equals(hs.getImageUrl(), getImageUrl()) &&
+            equals(hs.getLastBuildDate(), getLastBuildDate()) &&
+            equals(hs.getStageText(), getStageText()) &&
+            hs.getStage() == getStage();
+    }
+
+    private boolean equals(Object o1, Object o2) {
+        return o1 == null ? o2 == null : o1.equals(o2);
     }
 }

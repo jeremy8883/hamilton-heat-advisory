@@ -5,4 +5,5 @@ dependencies {
     compile 'org.json:json:20140107'
     compile 'joda-time:joda-time:2.8.1'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
+    testCompile 'junit:junit:4.12'
 }

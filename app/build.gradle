@@ -33,4 +33,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.jakewharton:butterknife:7.0.0'
     compile project(':shared')
+    testCompile 'junit:junit:4.12'
 }
