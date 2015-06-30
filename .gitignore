@@ -6,3 +6,5 @@
 /build
 /captures
 desktop.ini
+
+/server/gcm-settings.json

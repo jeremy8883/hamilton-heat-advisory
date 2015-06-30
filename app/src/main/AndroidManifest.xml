@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".app.ui.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,14 +35,14 @@
             </intent-filter>
         </receiver>
         <service
-            android:name=".gcm.MyGcmListenerService"
+            android:name=".app.gcm.MyGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
         <service
-            android:name=".gcm.MyInstanceIDListenerService"
+            android:name=".app.gcm.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID"/>
@@ -50,11 +50,11 @@
         </service>
 
         <service
-            android:name="net.jeremycasey.hamiltonheatalert.gcm.RegistrationIntentService"
+            android:name=".app.gcm.RegistrationIntentService"
             android:exported="false">
         </service>
         <service
-            android:name="net.jeremycasey.hamiltonheatalert.gcm.UnregistrationIntentService"
+            android:name=".app.gcm.UnregistrationIntentService"
             android:exported="false">
         </service>
     </application>

@@ -1,5 +1,7 @@
 - Rename the heatadvisory package to heatalert
 - Use RX Android
+- Use buttery
+- Fix the junit tests
 - When getting a gcm message, send a broardcast of the response, and maybe use the same mechanism for the manual refresh
 - What happens to the GCM registration when there's an app update?
 - Fix tests
@@ -12,3 +14,5 @@
 - Automatically subbscribe to notifications once app is installed
 - Have checkbox to turn notifications off
 - Checkbox to remember setting if registered or not
+- For registering/unregistering, use optimistic approach for checkbox
+- Add disclaimer about reinstalling the app
