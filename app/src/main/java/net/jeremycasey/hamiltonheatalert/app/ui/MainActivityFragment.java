@@ -30,17 +30,22 @@ import net.jeremycasey.hamiltonheatalert.app.utils.PreferenceUtil;
 import net.jeremycasey.hamiltonheatalert.heatadvisory.HeatAdvisory;
 import net.jeremycasey.hamiltonheatalert.heatadvisory.HeatAdvisoryIsImportantChecker;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
+
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
-    private TextView mAdvisoryStatus;
+    @Bind(R.id.advisoryStatus) TextView mAdvisoryStatus;
 
     private HeatAdvisoryFetcherAsync mHeatAdvisoryFetcher = null;
-    private Button mRefreshButton;
-    private TextView pushAlertsMessage;
-    private CheckBox pushAlertsCheckBox;
+    @Bind(R.id.refreshButton) Button mRefreshButton;
+    @Bind(R.id.pushAlertsMessage) TextView pushAlertsMessage;
+    @Bind(R.id.pushAlertsCheckBox) CheckBox pushAlertsCheckBox;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -51,33 +56,14 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view =  inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mAdvisoryStatus = (TextView)getView().findViewById(R.id.advisoryStatus);
-        mRefreshButton = (Button)getView().findViewById(R.id.refreshButton);
-        mRefreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateAdvisoryStatus();
-            }
-        });
-        pushAlertsCheckBox = (CheckBox) getActivity().findViewById(R.id.pushAlertsCheckBox);
-        pushAlertsCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    registerForGcm();
-                } else {
-                    unregisterForGcm();
-                }
-            }
-        });
-        pushAlertsMessage = (TextView) getActivity().findViewById(R.id.pushAlertsMessage);
 
         if (checkPlayServices()) {
             if (PreferenceUtil.getBoolean(getActivity(), GcmPreferences.REGISTER_AUTOMATICALLY_ON_LOAD, true)) {
@@ -88,6 +74,18 @@ public class MainActivityFragment extends Fragment {
         }
 
         updateAdvisoryStatus();
+    }
+
+    @OnClick(R.id.refreshButton) void onRefreshButtonClicked() {
+        updateAdvisoryStatus();
+    }
+
+    @OnCheckedChanged(R.id.pushAlertsCheckBox) void onPushAlertCheckboxChange(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            registerForGcm();
+        } else {
+            unregisterForGcm();
+        }
     }
 
     @Override
@@ -112,6 +110,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(getActivity());
         mAdvisoryStatus = null;
         mRefreshButton = null;
         if (mHeatAdvisoryFetcher != null) {

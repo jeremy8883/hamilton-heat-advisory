@@ -1,18 +1,16 @@
-- Rename the heatadvisory package to heatalert
-- Use RX Android
-- Use buttery
-- Fix the junit tests
+- Rename the heatadvisory package to heatalert - 5 mint
+- Fix the junit tests - 10 mins
+- Use RX Android - 2 hrs
+- Log when alerts are displayed and ensure notifications are not shown multiple times in one day - 1 hr
+- Same but with the server app?
+- Error handling - make text red, show error if no internet for a while - 1 hr
+- Server error handling - 1 hr
+
+- Publish to app store
+
+- Add disclaimer about reinstalling the app
+- Cache results for on rotate
+- Lay out the data a little nicer
+- For registering/unregistering, use optimistic approach for checkbox
 - When getting a gcm message, send a broardcast of the response, and maybe use the same mechanism for the manual refresh
 - What happens to the GCM registration when there's an app update?
-- Fix tests
-- Use app compat
-- Log when alerts are displayed and ensure notifications are not shown multiple times in one day
-- Use google cloud for notifications
-- Error handling - make text red, show error if no internet for a while
-- Lay out the data a little nicer
-- Cache results for on rotate
-- Automatically subbscribe to notifications once app is installed
-- Have checkbox to turn notifications off
-- Checkbox to remember setting if registered or not
-- For registering/unregistering, use optimistic approach for checkbox
-- Add disclaimer about reinstalling the app
