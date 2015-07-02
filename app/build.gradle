@@ -32,6 +32,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:7.5.+'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.jakewharton:butterknife:7.0.0'
+    compile 'io.reactivex:rxandroid:0.25.0'
     compile project(':shared')
     testCompile 'junit:junit:4.12'
 }

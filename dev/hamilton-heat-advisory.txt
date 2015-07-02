@@ -1,13 +1,16 @@
-- Fix the junit tests - 10 mins
-- Fix single run server task
 - Use RX Android - 2 hrs
+- Fix single run server task
 - Log when alerts are displayed and ensure notifications are not shown multiple times in one day - 1 hr
 - Same but with the server app?
 - Error handling - make text red, show error if no internet for a while - 1 hr
 - Server error handling - 1 hr
+- Multiple topics to work based on dev or live
+- On resume, the refreshing status is locked
 
 - Publish to app store
 
+- Add android tests
+- Try out mockito
 - Add disclaimer about reinstalling the app
 - Cache results for on rotate
 - Lay out the data a little nicer

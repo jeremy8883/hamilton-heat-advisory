@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,15 +25,20 @@ import net.jeremycasey.hamiltonheatalert.app.gcm.MyGcmListenerService;
 import net.jeremycasey.hamiltonheatalert.app.gcm.RegistrationIntentService;
 import net.jeremycasey.hamiltonheatalert.app.gcm.UnregistrationIntentService;
 import net.jeremycasey.hamiltonheatalert.app.notifications.HeatStatusNotification;
-import net.jeremycasey.hamiltonheatalert.app.heatstatus.HeatStatusFetcherAsync;
 import net.jeremycasey.hamiltonheatalert.app.utils.PreferenceUtil;
+import net.jeremycasey.hamiltonheatalert.app.utils.RxUtil;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
+import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusFetcher;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusIsImportantChecker;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 
 /**
@@ -42,15 +47,16 @@ import butterknife.OnClick;
 public class MainActivityFragment extends Fragment {
     @Bind(R.id.advisoryStatus) TextView mAdvisoryStatus;
 
-    private HeatStatusFetcherAsync mHeatAdvisoryFetcher = null;
     @Bind(R.id.refreshButton) Button mRefreshButton;
     @Bind(R.id.pushAlertsMessage) TextView pushAlertsMessage;
     @Bind(R.id.pushAlertsCheckBox) CheckBox pushAlertsCheckBox;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-    public MainActivityFragment() {
+    private CompositeSubscription mSubscriptions = new CompositeSubscription();
 
+    public MainActivityFragment() {
+        mSubscriptions = RxUtil.getNewCompositeSubIfUnsubscribed(mSubscriptions);
     }
 
     @Override
@@ -102,6 +108,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        RxUtil.unsubscribeIfNotNull(mSubscriptions);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOnGcmRegistrtionResponse);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOnGcmUnregistrtionResponse);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOnGcmMessageReceived);
@@ -113,10 +120,6 @@ public class MainActivityFragment extends Fragment {
         ButterKnife.unbind(getActivity());
         mAdvisoryStatus = null;
         mRefreshButton = null;
-        if (mHeatAdvisoryFetcher != null) {
-            mHeatAdvisoryFetcher.cancel(true);
-            mHeatAdvisoryFetcher = null;
-        }
     }
 
     private boolean checkPlayServices() {
@@ -179,22 +182,24 @@ public class MainActivityFragment extends Fragment {
 
     private void updateAdvisoryStatus() {
         displayAsChecking();
-        if (mHeatAdvisoryFetcher != null) {
-            mHeatAdvisoryFetcher.cancel(true);
-        }
-        mHeatAdvisoryFetcher = new HeatStatusFetcherAsync(mHeatAdvisoryFetcherListener);
-        mHeatAdvisoryFetcher.execute();
+        mSubscriptions.add(
+                new HeatStatusFetcher().toObservable()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(mOnHeatAlertFetched)
+        );
     }
 
-    private HeatStatusFetcherAsync.FetchListener mHeatAdvisoryFetcherListener = new HeatStatusFetcherAsync.FetchListener() {
+    private Observer<HeatStatus> mOnHeatAlertFetched = new Observer<HeatStatus>() {
         @Override
-        public void onFetchComplete(HeatStatus heatStatus) {
+        public void onNext(HeatStatus heatStatus) {
             displayAsNoLongerChecking();
             displayHeatAdvisoryInfo(heatStatus);
         }
-
         @Override
-        public void onFetchError(Exception ex) {
+        public void onCompleted() { }
+        @Override
+        public void onError(Throwable e) {
             displayAsNoLongerChecking();
             showError(getString(R.string.heatAdvisoryFetchError));
         }
@@ -235,9 +240,6 @@ public class MainActivityFragment extends Fragment {
     BroadcastReceiver mOnGcmMessageReceived = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mHeatAdvisoryFetcher != null) {
-                mHeatAdvisoryFetcher.cancel(true);
-            }
             displayAsNoLongerChecking();
             Bundle extras = intent.getExtras();
             HeatStatus heatStatus = (HeatStatus)extras.getSerializable("heatStatus");
