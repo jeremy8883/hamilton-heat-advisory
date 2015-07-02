@@ -1,5 +1,6 @@
 package net.jeremycasey.hamiltonheatalert.server;
 
+import net.jeremycasey.hamiltonheatalert.gcm.GcmSettings;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 
 import org.apache.commons.io.IOUtils;
@@ -33,7 +34,7 @@ public class GcmSender {
 
         jData.put("message", message);
         // Where to send GCM message.
-        jGcmData.put("to", "/topics/heatalert");
+        jGcmData.put("to", "/topics/" + GcmSettings.TOPIC);
 
         // What to send in GCM message.
         jGcmData.put("data", jData);

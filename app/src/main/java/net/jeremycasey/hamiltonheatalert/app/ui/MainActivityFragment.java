@@ -20,7 +20,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import net.jeremycasey.hamiltonheatalert.R;
-import net.jeremycasey.hamiltonheatalert.app.gcm.GcmPreferences;
+import net.jeremycasey.hamiltonheatalert.app.gcm.GcmPreferenceKeys;
 import net.jeremycasey.hamiltonheatalert.app.gcm.MyGcmListenerService;
 import net.jeremycasey.hamiltonheatalert.app.gcm.RegistrationIntentService;
 import net.jeremycasey.hamiltonheatalert.app.gcm.UnregistrationIntentService;
@@ -41,9 +41,6 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class MainActivityFragment extends Fragment {
     @Bind(R.id.advisoryStatus) TextView mAdvisoryStatus;
 
@@ -72,10 +69,10 @@ public class MainActivityFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if (checkPlayServices()) {
-            if (PreferenceUtil.getBoolean(getActivity(), GcmPreferences.REGISTER_AUTOMATICALLY_ON_LOAD, true)) {
+            if (PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.REGISTER_AUTOMATICALLY_ON_LOAD, true)) {
                 registerForGcm();
             } else {
-                pushAlertsCheckBox.setChecked(PreferenceUtil.getBoolean(getActivity(), GcmPreferences.SENT_TOKEN_TO_SERVER, false));
+                pushAlertsCheckBox.setChecked(PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false));
             }
         }
 
@@ -150,12 +147,12 @@ public class MainActivityFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             pushAlertsCheckBox.setEnabled(true);
-            boolean sentToken = PreferenceUtil.getBoolean(getActivity(), GcmPreferences.SENT_TOKEN_TO_SERVER, false);
+            boolean sentToken = PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false);
             if (sentToken) {
                 pushAlertsCheckBox.setChecked(true);
                 hidePushAlertMessageBelowCheckbox();
                 //Once the first automatic registration is complete, the (un)registration is manual from then on
-                PreferenceUtil.put(getActivity(), GcmPreferences.REGISTER_AUTOMATICALLY_ON_LOAD, false);
+                PreferenceUtil.put(getActivity(), GcmPreferenceKeys.REGISTER_AUTOMATICALLY_ON_LOAD, false);
             } else {
                 pushAlertsCheckBox.setChecked(false);
                 showPushAlertMessageBelowCheckbox(R.string.pushAlertsRegistrationFailed);

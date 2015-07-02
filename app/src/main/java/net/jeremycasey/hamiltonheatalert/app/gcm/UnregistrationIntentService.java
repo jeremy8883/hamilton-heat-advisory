@@ -42,12 +42,12 @@ public class UnregistrationIntentService extends IntentService {
 
                 unsubscribeTopics(token);
 
-                PreferenceUtil.put(this, GcmPreferences.SENT_TOKEN_TO_SERVER, false);
+                PreferenceUtil.put(this, GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false);
             }
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);
             //As long as the preference is set to false, push messages will get ignored anyway
-            PreferenceUtil.put(this, GcmPreferences.SENT_TOKEN_TO_SERVER, false);
+            PreferenceUtil.put(this, GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false);
         }
         // Notify UI that unregistration has completed
         Intent unregistrationComplete = new Intent(UNREGISTRATION_COMPLETE);
