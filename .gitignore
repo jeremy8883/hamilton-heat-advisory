@@ -8,3 +8,5 @@
 desktop.ini
 
 /server/gcm-settings.json
+/shared/build
+/server/build
