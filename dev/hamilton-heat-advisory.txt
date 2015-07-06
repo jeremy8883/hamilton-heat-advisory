@@ -1,4 +1,5 @@
-- Use RX Android - 2 hrs
+- Use RX Android - for server app
+- clean up mainactivity fragment
 - Fix single run server task
 - Log when alerts are displayed and ensure notifications are not shown multiple times in one day - 1 hr
 - Same but with the server app?

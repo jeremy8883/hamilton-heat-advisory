@@ -1,12 +1,9 @@
 package net.jeremycasey.hamiltonheatalert.app.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,14 +33,15 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import rx.Observer;
+import rx.android.content.ContentObservable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 
 public class MainActivityFragment extends Fragment {
     @Bind(R.id.advisoryStatus) TextView mAdvisoryStatus;
-
     @Bind(R.id.refreshButton) Button mRefreshButton;
     @Bind(R.id.pushAlertsMessage) TextView pushAlertsMessage;
     @Bind(R.id.pushAlertsCheckBox) CheckBox pushAlertsCheckBox;
@@ -83,8 +81,8 @@ public class MainActivityFragment extends Fragment {
         updateAdvisoryStatus();
     }
 
-    @OnCheckedChanged(R.id.pushAlertsCheckBox) void onPushAlertCheckboxChange(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
+    @OnClick(R.id.pushAlertsCheckBox) void onPushAlertCheckboxChange() {
+        if (pushAlertsCheckBox.isChecked()) {
             registerForGcm();
         } else {
             unregisterForGcm();
@@ -94,21 +92,39 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mOnGcmRegistrtionResponse,
-                new IntentFilter(RegistrationIntentService.REGISTRATION_COMPLETE));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mOnGcmUnregistrtionResponse,
-                new IntentFilter(UnregistrationIntentService.UNREGISTRATION_COMPLETE));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mOnGcmMessageReceived,
-                new IntentFilter(MyGcmListenerService.NEW_ALERT_RECEIVED));
+        mSubscriptions.add(
+        ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(RegistrationIntentService.REGISTRATION_COMPLETE))
+                .subscribe(new Action1<Intent>() {
+                    @Override
+                    public void call(Intent intent) {
+                        onGcmRegistrationResponse(intent);
+                    }
+                })
+        );
+        mSubscriptions.add(
+        ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(UnregistrationIntentService.UNREGISTRATION_COMPLETE))
+                .subscribe(new Action1<Intent>() {
+                    @Override
+                    public void call(Intent intent) {
+                        onGcmUnregistrtionResponse(intent);
+                    }
+                })
+        );
+        mSubscriptions.add(
+        ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(MyGcmListenerService.NEW_ALERT_RECEIVED))
+                .subscribe(new Action1<Intent>() {
+                    @Override
+                    public void call(Intent intent) {
+                        onGcmMessageReceived(intent);
+                    }
+                })
+        );
     }
 
     @Override
     public void onPause() {
         super.onPause();
         RxUtil.unsubscribeIfNotNull(mSubscriptions);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOnGcmRegistrtionResponse);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOnGcmUnregistrtionResponse);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOnGcmMessageReceived);
     }
 
     @Override
@@ -143,22 +159,17 @@ public class MainActivityFragment extends Fragment {
         //mOnGcmRegistrtionResponse callback is (un)registered at onResume and onPause
     }
 
-    private BroadcastReceiver mOnGcmRegistrtionResponse = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            pushAlertsCheckBox.setEnabled(true);
-            boolean sentToken = PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false);
-            if (sentToken) {
-                pushAlertsCheckBox.setChecked(true);
-                hidePushAlertMessageBelowCheckbox();
-                //Once the first automatic registration is complete, the (un)registration is manual from then on
-                PreferenceUtil.put(getActivity(), GcmPreferenceKeys.REGISTER_AUTOMATICALLY_ON_LOAD, false);
-            } else {
-                pushAlertsCheckBox.setChecked(false);
-                showPushAlertMessageBelowCheckbox(R.string.pushAlertsRegistrationFailed);
-            }
+    public void onGcmRegistrationResponse(Intent intent) {
+        pushAlertsCheckBox.setEnabled(true);
+        boolean sentToken = PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false);
+        if (sentToken) {
+            pushAlertsCheckBox.setChecked(true);
+            hidePushAlertMessageBelowCheckbox();
+        } else {
+            pushAlertsCheckBox.setChecked(false);
+            showPushAlertMessageBelowCheckbox(R.string.pushAlertsRegistrationFailed);
         }
-    };
+    }
 
     private void unregisterForGcm() {
         pushAlertsCheckBox.setChecked(false);
@@ -168,14 +179,11 @@ public class MainActivityFragment extends Fragment {
         //mOnGcmUnregistrtionResponse callback is (un)registered at onResume and onPause
     }
 
-    private BroadcastReceiver mOnGcmUnregistrtionResponse = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            pushAlertsCheckBox.setEnabled(true);
-            pushAlertsCheckBox.setChecked(false);
-            hidePushAlertMessageBelowCheckbox();
-        }
-    };
+    private void onGcmUnregistrtionResponse(Intent intent) {
+        hidePushAlertMessageBelowCheckbox();
+        pushAlertsCheckBox.setEnabled(true);
+        pushAlertsCheckBox.setChecked(false);
+    }
 
     private void updateAdvisoryStatus() {
         displayAsChecking();
@@ -234,13 +242,10 @@ public class MainActivityFragment extends Fragment {
         mAdvisoryStatus.setText(text);
     }
 
-    BroadcastReceiver mOnGcmMessageReceived = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            displayAsNoLongerChecking();
-            Bundle extras = intent.getExtras();
-            HeatStatus heatStatus = (HeatStatus)extras.getSerializable("heatStatus");
-            displayHeatAdvisoryInfo(heatStatus);
-        }
-    };
+    public void onGcmMessageReceived(Intent intent) {
+        displayAsNoLongerChecking();
+        Bundle extras = intent.getExtras();
+        HeatStatus heatStatus = (HeatStatus)extras.getSerializable("heatStatus");
+        displayHeatAdvisoryInfo(heatStatus);
+    }
 }

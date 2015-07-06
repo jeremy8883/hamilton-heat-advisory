@@ -51,60 +51,35 @@ public class RegistrationIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
-            // In the (unlikely) event that multiple refresh operations occur simultaneously,
-            // ensure that they are processed sequentially.
             synchronized (TAG) {
-                // [START register_for_gcm]
-                // Initially this call goes out to the network to retrieve the token, subsequent calls
-                // are local.
-                // [START get_token]
-                InstanceID instanceID = InstanceID.getInstance(this);
-                String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-                // [END get_token]
-                Log.i(TAG, "GCM Registration Token: " + token);
+                String token = getGcmToken();
 
-                // TODO: Implement this method to send any registration to your app's servers.
-                sendRegistrationToServer(token);
-
-                // Subscribe to topic channels
                 subscribeTopics(token);
 
-                // You should store a boolean that indicates whether the generated token has been
-                // sent to your server. If the boolean is false, send the token to your server,
-                // otherwise your server should have already received the token.
                 PreferenceUtil.put(this, GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, true);
-                // [END register_for_gcm]
+
+                //Once the first automatic registration is complete, the (un)registration is manual from then on
+                PreferenceUtil.put(this, GcmPreferenceKeys.REGISTER_AUTOMATICALLY_ON_LOAD, false);
             }
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);
-            // If an exception happens while fetching the new token or updating our registration data
-            // on a third-party server, this ensures that we'll attempt the update at a later time.
+            //This ensures that we'll attempt the update at a later time.
+            PreferenceUtil.put(this, GcmPreferenceKeys.REGISTER_AUTOMATICALLY_ON_LOAD, false);
             PreferenceUtil.put(this, GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false);
         }
-        // Notify UI that registration has completed, so the progress indicator can be hidden.
-        Intent registrationComplete = new Intent(REGISTRATION_COMPLETE);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+        notifySubscribersOfCompletion();
     }
 
-    /**
-     * Persist registration to third-party servers.
-     *
-     * Modify this method to associate the user's GCM registration token with any server-side account
-     * maintained by your application.
-     *
-     * @param token The new token.
-     */
-    private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
+    private String getGcmToken() throws IOException {
+        // Initially this call goes out to the network to retrieve the token, subsequent calls
+        // are local.
+        InstanceID instanceID = InstanceID.getInstance(this);
+        String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+                GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+        Log.i(TAG, "GCM Registration Token: " + token);
+        return token;
     }
 
-    /**
-     * Subscribe to any GCM topics of interest, as defined by the TOPICS constant.
-     *
-     * @param token GCM token
-     * @throws IOException if unable to reach the GCM PubSub service
-     */
     private void subscribeTopics(String token) throws IOException {
         for (String topic : TOPICS) {
             GcmPubSub pubSub = GcmPubSub.getInstance(this);
@@ -112,11 +87,8 @@ public class RegistrationIntentService extends IntentService {
         }
     }
 
-    private void unsubscribeTopics(String token) throws IOException {
-        for (String topic : TOPICS) {
-            GcmPubSub pubSub = GcmPubSub.getInstance(this);
-            pubSub.unsubscribe(token, "/topics/" + topic);
-        }
+    private void notifySubscribersOfCompletion() {
+        Intent registrationComplete = new Intent(REGISTRATION_COMPLETE);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
     }
-
 }

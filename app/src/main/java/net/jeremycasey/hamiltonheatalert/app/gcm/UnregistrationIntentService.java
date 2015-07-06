@@ -35,10 +35,7 @@ public class UnregistrationIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         try {
             synchronized (RegistrationIntentService.TAG) {
-                InstanceID instanceID = InstanceID.getInstance(this);
-                String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-                Log.i(TAG, "GCM Registration Token: " + token);
+                String token = getGcmToken();
 
                 unsubscribeTopics(token);
 
@@ -49,16 +46,28 @@ public class UnregistrationIntentService extends IntentService {
             //As long as the preference is set to false, push messages will get ignored anyway
             PreferenceUtil.put(this, GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false);
         }
-        // Notify UI that unregistration has completed
-        Intent unregistrationComplete = new Intent(UNREGISTRATION_COMPLETE);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(unregistrationComplete);
+
+        notifySubscribersOfCompletion();
     }
 
+
+    private String getGcmToken() throws IOException {
+        InstanceID instanceID = InstanceID.getInstance(this);
+        String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+                GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+        Log.i(TAG, "GCM unregistration Token: " + token);
+        return token;
+    }
     private void unsubscribeTopics(String token) throws IOException {
         for (String topic : TOPICS) {
             GcmPubSub pubSub = GcmPubSub.getInstance(this);
             pubSub.unsubscribe(token, "/topics/" + topic);
         }
+    }
+
+    private void notifySubscribersOfCompletion() {
+        Intent unregistrationComplete = new Intent(UNREGISTRATION_COMPLETE);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(unregistrationComplete);
     }
 
 }
