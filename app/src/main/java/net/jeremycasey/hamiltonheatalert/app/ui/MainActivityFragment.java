@@ -1,16 +1,21 @@
 package net.jeremycasey.hamiltonheatalert.app.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,7 +35,6 @@ import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusIsImportantChecker
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import rx.Observer;
 import rx.android.content.ContentObservable;
@@ -42,9 +46,10 @@ import rx.subscriptions.CompositeSubscription;
 
 public class MainActivityFragment extends Fragment {
     @Bind(R.id.advisoryStatus) TextView mAdvisoryStatus;
-    @Bind(R.id.refreshButton) Button mRefreshButton;
     @Bind(R.id.pushAlertsMessage) TextView pushAlertsMessage;
     @Bind(R.id.pushAlertsCheckBox) CheckBox pushAlertsCheckBox;
+    private MenuItem mRefreshMenuItem = null;
+    private Animation mRefreshRotation = null;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -52,6 +57,12 @@ public class MainActivityFragment extends Fragment {
 
     public MainActivityFragment() {
         mSubscriptions = RxUtil.getNewCompositeSubIfUnsubscribed(mSubscriptions);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -77,8 +88,41 @@ public class MainActivityFragment extends Fragment {
         updateAdvisoryStatus();
     }
 
-    @OnClick(R.id.refreshButton) void onRefreshButtonClicked() {
-        updateAdvisoryStatus();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_fragment, menu);
+
+        mRefreshMenuItem = menu.findItem(R.id.action_refresh);
+        mRefreshRotation = AnimationUtils.loadAnimation(getActivity(), R.anim.refresh_rotate);
+        LinearLayout lay = (LinearLayout)((LayoutInflater)getActivity()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.ic_action_refresh, null);
+        lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(mRefreshMenuItem);
+            }
+        });
+
+        mRefreshMenuItem.setActionView(lay);
+    }
+
+    @Override
+    public void onDestroyOptionsMenu() {
+        mRefreshMenuItem = null;
+        mRefreshRotation = null;
+        super.onDestroyOptionsMenu();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_refresh:
+                updateAdvisoryStatus();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.pushAlertsCheckBox) void onPushAlertCheckboxChange() {
@@ -93,31 +137,31 @@ public class MainActivityFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mSubscriptions.add(
-        ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(RegistrationIntentService.REGISTRATION_COMPLETE))
-                .subscribe(new Action1<Intent>() {
-                    @Override
-                    public void call(Intent intent) {
-                        onGcmRegistrationResponse(intent);
-                    }
-                })
+                ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(RegistrationIntentService.REGISTRATION_COMPLETE))
+                        .subscribe(new Action1<Intent>() {
+                            @Override
+                            public void call(Intent intent) {
+                                onGcmRegistrationResponse(intent);
+                            }
+                        })
         );
         mSubscriptions.add(
-        ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(UnregistrationIntentService.UNREGISTRATION_COMPLETE))
-                .subscribe(new Action1<Intent>() {
-                    @Override
-                    public void call(Intent intent) {
-                        onGcmUnregistrtionResponse(intent);
-                    }
-                })
+                ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(UnregistrationIntentService.UNREGISTRATION_COMPLETE))
+                        .subscribe(new Action1<Intent>() {
+                            @Override
+                            public void call(Intent intent) {
+                                onGcmUnregistrtionResponse(intent);
+                            }
+                        })
         );
         mSubscriptions.add(
-        ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(MyGcmListenerService.NEW_ALERT_RECEIVED))
-                .subscribe(new Action1<Intent>() {
-                    @Override
-                    public void call(Intent intent) {
-                        onGcmMessageReceived(intent);
-                    }
-                })
+                ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(MyGcmListenerService.NEW_ALERT_RECEIVED))
+                        .subscribe(new Action1<Intent>() {
+                            @Override
+                            public void call(Intent intent) {
+                                onGcmMessageReceived(intent);
+                            }
+                        })
         );
     }
 
@@ -131,8 +175,6 @@ public class MainActivityFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(getActivity());
-        mAdvisoryStatus = null;
-        mRefreshButton = null;
     }
 
     private boolean checkPlayServices() {
@@ -211,17 +253,21 @@ public class MainActivityFragment extends Fragment {
     };
 
     private void displayAsChecking() {
-        mRefreshButton.setEnabled(false);
-        mRefreshButton.setText(R.string.refreshButtonChecking);
+        if (mRefreshMenuItem != null) {
+            if (mRefreshMenuItem.getActionView().findViewById(R.id.ivIcon).getAnimation() == null) {
+                mRefreshMenuItem.getActionView().findViewById(R.id.ivIcon).startAnimation(mRefreshRotation);
+            }
+        }
         mAdvisoryStatus.setText(R.string.advisoryStatusChecking);
     }
     private void displayAsNoLongerChecking() {
-        mRefreshButton.setText(R.string.refreshButton);
-        mRefreshButton.setEnabled(true);
+        if (mRefreshMenuItem != null) {
+            mRefreshMenuItem.getActionView().findViewById(R.id.ivIcon).clearAnimation();
+        }
     }
 
     private void displayHeatAdvisoryInfo(HeatStatus heatStatus) {
-        mAdvisoryStatus.setText(heatStatus.getStageText());
+        mAdvisoryStatus.setText(heatStatus.getStageText().replace(" - ", "\r\n"));
         HeatStatusNotification heatStatusNotification = new HeatStatusNotification(heatStatus, getActivity());
         if (new HeatStatusIsImportantChecker(heatStatus).isImportant()) {
             heatStatusNotification.showNotification();

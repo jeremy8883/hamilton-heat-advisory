@@ -15,4 +15,7 @@
     <string name="pushAlertsRegistrationFailed">There was a problem registering for push alerts</string>
     <string name="gcmMessageReceiveError">There was a problem retreiving the latest heat warning</string>
     <string name="unregisteringPushNotificationsPleaseWait">Unregistering. Please wait...</string>
+    <string name="refreshMenu">Recheck heat status</string>
+    <string name="menuSubscribeToPushAlerts">Subscribe to push alerts</string>
+    <string name="empty" />
 </resources>

@@ -17,7 +17,7 @@ public class Server {
             int heatRating = Integer.parseInt(args[0]);
             sendManualMessageToGcm(heatRating);
         } else {
-            continuouslyCheckAlertStatusAndSendGcmMessageIfNessesary();
+            continuouslyCheckAlertStatusAndSendGcmMessageIfNecessary();
         }
     }
 
@@ -33,7 +33,7 @@ public class Server {
         }
     }
 
-    private static void continuouslyCheckAlertStatusAndSendGcmMessageIfNessesary() {
+    private static void continuouslyCheckAlertStatusAndSendGcmMessageIfNecessary() {
         int checkEveryMinutes = 5;
         log("Watcher started. The hamilton heat alert rss feed will be checked every " + checkEveryMinutes + " minutes.");
         while (true) {

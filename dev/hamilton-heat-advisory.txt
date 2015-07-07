@@ -1,12 +1,17 @@
-- Use RX Android - for server app
-- clean up mainactivity fragment
-- Fix single run server task
+- Show disclaimer at beginning
+- Show error notification if couldn't subscribe
+
+- Make sure that subscribe and unsubscibe are locked
+
 - Log when alerts are displayed and ensure notifications are not shown multiple times in one day - 1 hr
+- clean up mainactivity fragment (use an update method instead) - 30 mins
 - Same but with the server app?
 - Error handling - make text red, show error if no internet for a while - 1 hr
 - Server error handling - 1 hr
 - Multiple topics to work based on dev or live
 - On resume, the refreshing status is locked
+- Show colour of warning
+- Prevent multiple refresh taps
 
 - Publish to app store
 
@@ -18,3 +23,4 @@
 - For registering/unregistering, use optimistic approach for checkbox
 - When getting a gcm message, send a broardcast of the response, and maybe use the same mechanism for the manual refresh
 - What happens to the GCM registration when there's an app update?
+- Refreshing icon to update based on actual status
