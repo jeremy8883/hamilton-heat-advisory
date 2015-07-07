@@ -1,8 +1,6 @@
 - Show disclaimer at beginning
 - Show error notification if couldn't subscribe
 
-- Make sure that subscribe and unsubscibe are locked
-
 - Log when alerts are displayed and ensure notifications are not shown multiple times in one day - 1 hr
 - clean up mainactivity fragment (use an update method instead) - 30 mins
 - Same but with the server app?

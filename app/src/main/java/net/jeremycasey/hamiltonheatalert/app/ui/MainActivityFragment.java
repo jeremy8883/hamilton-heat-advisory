@@ -25,7 +25,6 @@ import net.jeremycasey.hamiltonheatalert.R;
 import net.jeremycasey.hamiltonheatalert.app.gcm.GcmPreferenceKeys;
 import net.jeremycasey.hamiltonheatalert.app.gcm.MyGcmListenerService;
 import net.jeremycasey.hamiltonheatalert.app.gcm.RegistrationIntentService;
-import net.jeremycasey.hamiltonheatalert.app.gcm.UnregistrationIntentService;
 import net.jeremycasey.hamiltonheatalert.app.notifications.HeatStatusNotification;
 import net.jeremycasey.hamiltonheatalert.app.utils.PreferenceUtil;
 import net.jeremycasey.hamiltonheatalert.app.utils.RxUtil;
@@ -137,20 +136,16 @@ public class MainActivityFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mSubscriptions.add(
-                ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(RegistrationIntentService.REGISTRATION_COMPLETE))
+                ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(RegistrationIntentService.REGISTRATION_CHANGED))
                         .subscribe(new Action1<Intent>() {
                             @Override
                             public void call(Intent intent) {
-                                onGcmRegistrationResponse(intent);
-                            }
-                        })
-        );
-        mSubscriptions.add(
-                ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(UnregistrationIntentService.UNREGISTRATION_COMPLETE))
-                        .subscribe(new Action1<Intent>() {
-                            @Override
-                            public void call(Intent intent) {
-                                onGcmUnregistrtionResponse(intent);
+                                boolean isSubscribe = intent.getBooleanExtra(RegistrationIntentService.EXTRA_IS_SUBSCRIPTION, true);
+                                if (isSubscribe) {
+                                    onGcmRegistrationResponse();
+                                } else {
+                                    onGcmUnregistrtionResponse();
+                                }
                             }
                         })
         );
@@ -197,11 +192,19 @@ public class MainActivityFragment extends Fragment {
         pushAlertsCheckBox.setChecked(true);
         pushAlertsCheckBox.setEnabled(false);
         showPushAlertMessageBelowCheckbox(R.string.registeringForPushNotificationsNowPleaseWait);
-        RegistrationIntentService.start(getActivity());
+        RegistrationIntentService.start(getActivity(), true);
         //mOnGcmRegistrtionResponse callback is (un)registered at onResume and onPause
     }
 
-    public void onGcmRegistrationResponse(Intent intent) {
+    private void unregisterForGcm() {
+        pushAlertsCheckBox.setChecked(false);
+        pushAlertsCheckBox.setEnabled(false);
+        showPushAlertMessageBelowCheckbox(R.string.unregisteringPushNotificationsPleaseWait);
+        RegistrationIntentService.start(getActivity(), false);
+        //mOnGcmUnregistrtionResponse callback is (un)registered at onResume and onPause
+    }
+
+    public void onGcmRegistrationResponse() {
         pushAlertsCheckBox.setEnabled(true);
         boolean sentToken = PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false);
         if (sentToken) {
@@ -213,15 +216,7 @@ public class MainActivityFragment extends Fragment {
         }
     }
 
-    private void unregisterForGcm() {
-        pushAlertsCheckBox.setChecked(false);
-        pushAlertsCheckBox.setEnabled(false);
-        showPushAlertMessageBelowCheckbox(R.string.unregisteringPushNotificationsPleaseWait);
-        UnregistrationIntentService.start(getActivity());
-        //mOnGcmUnregistrtionResponse callback is (un)registered at onResume and onPause
-    }
-
-    private void onGcmUnregistrtionResponse(Intent intent) {
+    private void onGcmUnregistrtionResponse() {
         hidePushAlertMessageBelowCheckbox();
         pushAlertsCheckBox.setEnabled(true);
         pushAlertsCheckBox.setChecked(false);
