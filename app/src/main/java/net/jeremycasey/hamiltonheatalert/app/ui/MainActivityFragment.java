@@ -252,12 +252,14 @@ public class MainActivityFragment extends Fragment {
             if (mRefreshMenuItem.getActionView().findViewById(R.id.ivIcon).getAnimation() == null) {
                 mRefreshMenuItem.getActionView().findViewById(R.id.ivIcon).startAnimation(mRefreshRotation);
             }
+            mRefreshMenuItem.setEnabled(false);
         }
         mAdvisoryStatus.setText(R.string.advisoryStatusChecking);
     }
     private void displayAsNoLongerChecking() {
         if (mRefreshMenuItem != null) {
             mRefreshMenuItem.getActionView().findViewById(R.id.ivIcon).clearAnimation();
+            mRefreshMenuItem.setEnabled(true);
         }
     }
 

@@ -9,7 +9,6 @@
 - Multiple topics to work based on dev or live
 - On resume, the refreshing status is locked
 - Show colour of warning
-- Prevent multiple refresh taps
 
 - Publish to app store
 
