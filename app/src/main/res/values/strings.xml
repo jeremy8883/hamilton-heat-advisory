@@ -11,11 +11,24 @@
     <string name="alertContextText">Hamilton Heat Alert</string>
     <string name="errorGooglePlayServicesNotSupported">Your device does not support push notifications.</string>
     <string name="receivePushNotificationsCheckbox">Receive push notifications</string>
-    <string name="registeringForPushNotificationsNowPleaseWait">Registering for push notifications now. Please wait...</string>
+    <string name="registeringForPushNotificationsNowPleaseWait">Registering for push notifications now. Please wait…</string>
     <string name="pushAlertsRegistrationFailed">There was a problem registering for push alerts</string>
     <string name="gcmMessageReceiveError">There was a problem retreiving the latest heat warning</string>
-    <string name="unregisteringPushNotificationsPleaseWait">Unregistering. Please wait...</string>
+    <string name="unregisteringPushNotificationsPleaseWait">Unregistering. Please wait…</string>
     <string name="refreshMenu">Recheck heat status</string>
     <string name="menuSubscribeToPushAlerts">Subscribe to push alerts</string>
     <string name="empty" />
+    <string name="subscribe_success">You are now subscribed for push notifications.</string>
+    <string name="subscribe_success_description_1">You will now receive push notifications for heat alerts in Hamilton ON, Canada.</string>
+    <string name="subscribe_success_description_2">Note that if you reinstall this application at any time, you will need to also rerun this application at least once to resubscribe to these push alerts.</string>
+    <string name="continue_button">Continue</string>
+    <string name="one_moment">One moment…</string>
+    <string name="subscribe_error_description">Ensure that you are connected to the internet, and retry any time by reloading this app.</string>
+    <string name="subscribe_error">There was a problem subscribing you for push notifications.</string>
+    <string name="retry_button">Retry</string>
+    <string name="googlePlayServicesNotInstalled">Google play services not installed</string>
+    <string name="doNotShowAgain">Do not show again</string>
+    <string name="ok">OK</string>
+    <string name="pushNotSupportedDialogTitle">Push notification error</string>
+    <string name="pushNotSupportedDialogText">You are unable to subscribe to heat alerts because your device does not support them.</string>
 </resources>

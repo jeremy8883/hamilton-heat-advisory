@@ -54,8 +54,6 @@ public class RegistrationIntentService extends IntentService {
             }
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);
-            //This ensures that we'll attempt the update at a later time.
-            PreferenceUtil.put(this, GcmPreferenceKeys.REGISTER_AUTOMATICALLY_ON_LOAD, false);
             PreferenceUtil.put(this, GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false);
         }
         notifySubscribersOfCompletion(isSubscription);

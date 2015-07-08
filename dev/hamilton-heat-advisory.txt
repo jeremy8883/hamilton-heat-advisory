@@ -1,5 +1,14 @@
+- ensure that once installed play services, that everything registers
+- ensure evreything is using fixed dps
+
+- fix font sizes
+- Rotating on the main fragment fails
+- Fix second refresh
 - Show disclaimer at beginning
 - Show error notification if couldn't subscribe
+- Ensure everything works smooth if no internet connection
+- Ensure everything works smooth if phone doesn't support gcm
+
 
 - Log when alerts are displayed and ensure notifications are not shown multiple times in one day - 1 hr
 - clean up mainactivity fragment (use an update method instead) - 30 mins
@@ -9,9 +18,17 @@
 - Multiple topics to work based on dev or live
 - On resume, the refreshing status is locked
 - Show colour of warning
+- Fix refresh action button not with click state
+- Test if google play services not installed
+- Test if google play services not supported
+- Add disclaimer about everything works as is
+- Rename mainFragment to currentStatusFragment
 
 - Publish to app store
 
+- Show date last checked
+- Precache the heat alert on the first time screen
+- Fix naming conventions
 - Add android tests
 - Try out mockito
 - Add disclaimer about reinstalling the app
@@ -21,3 +38,4 @@
 - When getting a gcm message, send a broardcast of the response, and maybe use the same mechanism for the manual refresh
 - What happens to the GCM registration when there's an app update?
 - Refreshing icon to update based on actual status
+- Pebble / watch support

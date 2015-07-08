@@ -43,18 +43,16 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 
-public class MainActivityFragment extends Fragment {
+public class MainFragment extends Fragment {
     @Bind(R.id.advisoryStatus) TextView mAdvisoryStatus;
     @Bind(R.id.pushAlertsMessage) TextView pushAlertsMessage;
     @Bind(R.id.pushAlertsCheckBox) CheckBox pushAlertsCheckBox;
     private MenuItem mRefreshMenuItem = null;
     private Animation mRefreshRotation = null;
 
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
     private CompositeSubscription mSubscriptions = new CompositeSubscription();
 
-    public MainActivityFragment() {
+    public MainFragment() {
         mSubscriptions = RxUtil.getNewCompositeSubIfUnsubscribed(mSubscriptions);
     }
 
@@ -76,14 +74,8 @@ public class MainActivityFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (checkPlayServices()) {
-            if (PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.REGISTER_AUTOMATICALLY_ON_LOAD, true)) {
-                registerForGcm();
-            } else {
-                pushAlertsCheckBox.setChecked(PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false));
-            }
-        }
-
+        pushAlertsCheckBox.setChecked(PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false));
+        
         updateAdvisoryStatus();
     }
 
@@ -176,13 +168,14 @@ public class MainActivityFragment extends Fragment {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(),
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                showPushAlertMessageBelowCheckbox(R.string.googlePlayServicesNotInstalled);
             } else {
                 showPushAlertMessageBelowCheckbox(R.string.errorGooglePlayServicesNotSupported);
-                pushAlertsCheckBox.setEnabled(false);
-                pushAlertsCheckBox.setChecked(false);
             }
+
+            pushAlertsCheckBox.setEnabled(false);
+            pushAlertsCheckBox.setChecked(false);
+
             return false;
         }
         return true;
