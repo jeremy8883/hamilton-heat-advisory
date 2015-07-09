@@ -1,4 +1,3 @@
-- Delete WebRequestAsync and AsyncTaskResult
 - Show date last checked
 - On resume, the refreshing status is locked
 - Multiple topics to work based on dev or live
