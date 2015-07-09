@@ -1,5 +1,3 @@
-- Log when alerts are displayed and ensure notifications are not shown multiple times in one day - 1 hr
-- Rename HeatStatusIsImportantChecker to isSerious
 - Fix duplicated code for when notifications are displayed
 - Fetched status names are too long
 

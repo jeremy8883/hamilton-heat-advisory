@@ -9,12 +9,12 @@ public class HeatStatusIsImportantChecker {
         mStage = stage;
     }
 
-    public boolean isSerious() {
+    public boolean isImportant() {
         return mStage > 0;
     }
 
     public boolean shouldNotify(LastFetchedHeatStatus lastNotifiedHeatStatus) {
-        return isSerious() && isDifferentFromTheLastUpdateInThePast18Hours(lastNotifiedHeatStatus);
+        return isImportant() && isDifferentFromTheLastUpdateInThePast18Hours(lastNotifiedHeatStatus);
     }
 
     private boolean isDifferentFromTheLastUpdateInThePast18Hours(LastFetchedHeatStatus lastNotifiedHeatStatus) {
