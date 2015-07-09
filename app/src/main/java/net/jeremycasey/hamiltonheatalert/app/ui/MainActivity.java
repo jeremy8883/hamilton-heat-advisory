@@ -73,7 +73,7 @@ public class MainActivity extends ActionBarActivity implements FirstTimeSubscrib
     }
 
     private void showMainFragment() {
-        replaceMainFragment(new MainFragment(), "Main");
+        replaceMainFragment(new CurrentStatusFragment(), "Main");
     }
 
     private void replaceMainFragment(Fragment newFragment, String tag) {

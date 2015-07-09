@@ -43,7 +43,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 
-public class MainFragment extends Fragment {
+public class CurrentStatusFragment extends Fragment {
     @Bind(R.id.advisoryStatus) TextView mAdvisoryStatus;
     @Bind(R.id.pushAlertsMessage) TextView pushAlertsMessage;
     @Bind(R.id.pushAlertsCheckBox) CheckBox pushAlertsCheckBox;
@@ -52,7 +52,7 @@ public class MainFragment extends Fragment {
 
     private CompositeSubscription mSubscriptions = new CompositeSubscription();
 
-    public MainFragment() {
+    public CurrentStatusFragment() {
         mSubscriptions = RxUtil.getNewCompositeSubIfUnsubscribed(mSubscriptions);
     }
 
@@ -65,7 +65,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_main, container, false);
+        View view =  inflater.inflate(R.layout.fragment_current_status, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -75,7 +75,7 @@ public class MainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         pushAlertsCheckBox.setChecked(PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false));
-        
+
         updateAdvisoryStatus();
     }
 

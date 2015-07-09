@@ -22,7 +22,6 @@
 - Test if google play services not installed
 - Test if google play services not supported
 - Add disclaimer about everything works as is
-- Rename mainFragment to currentStatusFragment
 
 - Publish to app store
 
