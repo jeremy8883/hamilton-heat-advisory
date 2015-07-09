@@ -3,40 +3,40 @@ package net.jeremycasey.hamiltonheatalert.server;
 
 import com.google.gson.Gson;
 
-import net.jeremycasey.hamiltonheatalert.heatstatus.LastFetchedHeatStatus;
-import net.jeremycasey.hamiltonheatalert.heatstatus.LastFetchedHeatStatusLogger;
+import net.jeremycasey.hamiltonheatalert.heatstatus.LoggedHeatStatus;
+import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusLogger;
 
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 
-public class LastHeatAlertFileLogger implements LastFetchedHeatStatusLogger {
+public class HeatStatusFileLogger implements HeatStatusLogger {
     private static final String LOG_FILENAME = "last-fetched-heat-status.json";
 
-    public LastHeatAlertFileLogger() { }
+    public HeatStatusFileLogger() { }
 
     @Override
-    public void logFetchedStatus(LastFetchedHeatStatus heatStatusToLog) {
+    public void setMostRecentStatus(LoggedHeatStatus heatStatusToLog) {
         FetchedHeatStatuses fetchedHeatStatuses = getFetchedHeatStatuses();
         fetchedHeatStatuses.setLastFetchedHeatStatus(heatStatusToLog);
         writeFetchedHeatStatuses(fetchedHeatStatuses);
     }
 
     @Override
-    public void logFetchedAndNotifiedStatus(LastFetchedHeatStatus heatStatusToLog) {
+    public void setLastNotifiedStatus(LoggedHeatStatus heatStatusToLog) {
         FetchedHeatStatuses fetchedHeatStatuses = getFetchedHeatStatuses();
         fetchedHeatStatuses.setLastFetchedAndNotifiedHeatStatus(heatStatusToLog);
         writeFetchedHeatStatuses(fetchedHeatStatuses);
     }
 
     @Override
-    public LastFetchedHeatStatus getLastFetchedHeatStatus() {
+    public LoggedHeatStatus getMostRecentStatus() {
         return getFetchedHeatStatuses().getLastFetchedHeatStatus();
     }
 
     @Override
-    public LastFetchedHeatStatus getLastFetchedAndNotifiedHeatStatus() {
+    public LoggedHeatStatus getLastNotifiedStatus() {
         return getFetchedHeatStatuses().getLastFetchedAndNotifiedHeatStatus();
     }
 
@@ -66,22 +66,22 @@ public class LastHeatAlertFileLogger implements LastFetchedHeatStatusLogger {
     }
 
     public class FetchedHeatStatuses {
-        private LastFetchedHeatStatus lastFetchedHeatStatus = null;
-        private LastFetchedHeatStatus lastFetchedAndNotifiedHeatStatus = null;
+        private LoggedHeatStatus lastFetchedHeatStatus = null;
+        private LoggedHeatStatus lastFetchedAndNotifiedHeatStatus = null;
 
-        public LastFetchedHeatStatus getLastFetchedAndNotifiedHeatStatus() {
+        public LoggedHeatStatus getLastFetchedAndNotifiedHeatStatus() {
             return lastFetchedAndNotifiedHeatStatus;
         }
 
-        public void setLastFetchedAndNotifiedHeatStatus(LastFetchedHeatStatus lastFetchedAndNotifiedHeatStatus) {
+        public void setLastFetchedAndNotifiedHeatStatus(LoggedHeatStatus lastFetchedAndNotifiedHeatStatus) {
             this.lastFetchedAndNotifiedHeatStatus = lastFetchedAndNotifiedHeatStatus;
         }
 
-        public LastFetchedHeatStatus getLastFetchedHeatStatus() {
+        public LoggedHeatStatus getLastFetchedHeatStatus() {
             return lastFetchedHeatStatus;
         }
 
-        public void setLastFetchedHeatStatus(LastFetchedHeatStatus lastFetchedHeatStatus) {
+        public void setLastFetchedHeatStatus(LoggedHeatStatus lastFetchedHeatStatus) {
             this.lastFetchedHeatStatus = lastFetchedHeatStatus;
         }
     }

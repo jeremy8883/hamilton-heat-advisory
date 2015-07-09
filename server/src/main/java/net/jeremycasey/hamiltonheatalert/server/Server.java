@@ -3,7 +3,7 @@ package net.jeremycasey.hamiltonheatalert.server;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusFetcher;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusIsImportantChecker;
-import net.jeremycasey.hamiltonheatalert.heatstatus.LastFetchedHeatStatus;
+import net.jeremycasey.hamiltonheatalert.heatstatus.LoggedHeatStatus;
 import net.jeremycasey.hamiltonheatalert.utils.*;
 
 import java.lang.Exception;
@@ -40,17 +40,19 @@ public class Server {
         while (true) {
             try {
                 HeatStatus heatStatus = new HeatStatusFetcher().run();
-                LastHeatAlertFileLogger logger = new LastHeatAlertFileLogger();
-                LastFetchedHeatStatus lastFetchedStatus = logger.getLastFetchedAndNotifiedHeatStatus();
-                LastFetchedHeatStatus newFetchedStatus = new LastFetchedHeatStatus(heatStatus);
+
+                HeatStatusFileLogger logger = new HeatStatusFileLogger();
+                LoggedHeatStatus lastFetchedStatus = logger.getLastNotifiedStatus();
+                LoggedHeatStatus newFetchedStatus = new LoggedHeatStatus(heatStatus);
                 HeatStatusIsImportantChecker checker = new HeatStatusIsImportantChecker(heatStatus.getStage());
+
                 if (checker.shouldNotify(lastFetchedStatus)) {
                     log("Sending alert to gcm for \"" + heatStatus.getStageText() + "\"");
                     new GcmSender(heatStatus).send();
-                    logger.logFetchedAndNotifiedStatus(newFetchedStatus);
+                    logger.setLastNotifiedStatus(newFetchedStatus);
                     log("Sent");
                 }
-                logger.logFetchedStatus(newFetchedStatus);
+                logger.setMostRecentStatus(newFetchedStatus);
             } catch (Exception ex) {
                 log(StackTrace.toString(ex));
                 ErrorNotifier.notify(ex);
