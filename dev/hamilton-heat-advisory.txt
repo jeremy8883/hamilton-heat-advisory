@@ -1,5 +1,3 @@
-
-- Fix stage 3 warning text getting cut off
 - Delete WebRequestAsync and AsyncTaskResult
 - Show date last checked
 - On resume, the refreshing status is locked

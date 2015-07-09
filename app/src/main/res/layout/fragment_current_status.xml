@@ -25,7 +25,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
@@ -44,8 +44,16 @@
             android:textAppearance="?android:textAppearanceLarge"
             android:textSize="40sp"
             android:gravity="center_horizontal"
-            android:layout_marginTop="20dp"
             android:layout_below="@+id/textView"
+            android:layout_marginTop="@dimen/component_vertical_spacing"
             android:layout_centerHorizontal="true" />
+
+        <!-- Filler to push the content up-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/advisoryStatus"
+            android:layout_centerHorizontal="true"></LinearLayout>
     </RelativeLayout>
 </RelativeLayout>
