@@ -1,7 +1,6 @@
 - ensure that once installed play services, that everything registers
 - ensure evreything is using fixed dps
 
-- fix font sizes
 - Rotating on the main fragment fails
 - Fix second refresh
 - Show disclaimer at beginning
@@ -27,7 +26,6 @@
 
 - Show date last checked
 - Precache the heat alert on the first time screen
-- Fix naming conventions
 - Add android tests
 - Try out mockito
 - Add disclaimer about reinstalling the app

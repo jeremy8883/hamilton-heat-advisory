@@ -6,11 +6,11 @@
     style="@android:style/Widget.ActionButton"
     android:clickable="true"
     android:focusable="true"
-    android:contentDescription="@string/refreshMenu">
+    android:contentDescription="@string/refresh_menu">
     <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_refresh_white_36dp"
-        android:id="@+id/ivIcon"
+        android:id="@+id/actionIcon"
         android:contentDescription="@string/empty"/>
 </LinearLayout>

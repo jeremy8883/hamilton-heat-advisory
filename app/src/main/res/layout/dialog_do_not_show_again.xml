@@ -18,7 +18,7 @@
         android:id="@+id/doNotShowAgainCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/doNotShowAgain"
+        android:text="@string/do_not_show_again"
         android:layout_marginTop="@dimen/component_vertical_spacing"
         />
 

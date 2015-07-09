@@ -29,7 +29,7 @@ public class HeatStatusNotification {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext)
                 .setSmallIcon(R.drawable.ic_stat_thermometer)
                 .setContentTitle(mHeatStatus.getStageText())
-                .setContentText(mContext.getString(R.string.alertContextText))
+                .setContentText(mContext.getString(R.string.alert_context_text))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setTicker(mHeatStatus.getStageText())
                 .setVibrate(new long[] { 500, 500, 500 })

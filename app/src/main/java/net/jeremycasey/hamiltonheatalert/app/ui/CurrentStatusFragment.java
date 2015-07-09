@@ -81,9 +81,9 @@ public class CurrentStatusFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main_fragment, menu);
+        inflater.inflate(R.menu.current_status_fragment, menu);
 
-        mRefreshMenuItem = menu.findItem(R.id.action_refresh);
+        mRefreshMenuItem = menu.findItem(R.id.menuActionRefresh);
         mRefreshRotation = AnimationUtils.loadAnimation(getActivity(), R.anim.refresh_rotate);
         LinearLayout lay = (LinearLayout)((LayoutInflater)getActivity()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
@@ -109,7 +109,7 @@ public class CurrentStatusFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_refresh:
+            case R.id.menuActionRefresh:
                 updateAdvisoryStatus();
                 return true;
         }
@@ -168,9 +168,9 @@ public class CurrentStatusFragment extends Fragment {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                showPushAlertMessageBelowCheckbox(R.string.googlePlayServicesNotInstalled);
+                showPushAlertMessageBelowCheckbox(R.string.google_play_services_not_installed);
             } else {
-                showPushAlertMessageBelowCheckbox(R.string.errorGooglePlayServicesNotSupported);
+                showPushAlertMessageBelowCheckbox(R.string.error_google_play_services_not_supported);
             }
 
             pushAlertsCheckBox.setEnabled(false);
@@ -184,7 +184,7 @@ public class CurrentStatusFragment extends Fragment {
     private void registerForGcm() {
         pushAlertsCheckBox.setChecked(true);
         pushAlertsCheckBox.setEnabled(false);
-        showPushAlertMessageBelowCheckbox(R.string.registeringForPushNotificationsNowPleaseWait);
+        showPushAlertMessageBelowCheckbox(R.string.registering_for_push_notifications_now_please_wait);
         RegistrationIntentService.start(getActivity(), true);
         //mOnGcmRegistrtionResponse callback is (un)registered at onResume and onPause
     }
@@ -192,7 +192,7 @@ public class CurrentStatusFragment extends Fragment {
     private void unregisterForGcm() {
         pushAlertsCheckBox.setChecked(false);
         pushAlertsCheckBox.setEnabled(false);
-        showPushAlertMessageBelowCheckbox(R.string.unregisteringPushNotificationsPleaseWait);
+        showPushAlertMessageBelowCheckbox(R.string.unregistering_push_notifications_please_wait);
         RegistrationIntentService.start(getActivity(), false);
         //mOnGcmUnregistrtionResponse callback is (un)registered at onResume and onPause
     }
@@ -205,7 +205,7 @@ public class CurrentStatusFragment extends Fragment {
             hidePushAlertMessageBelowCheckbox();
         } else {
             pushAlertsCheckBox.setChecked(false);
-            showPushAlertMessageBelowCheckbox(R.string.pushAlertsRegistrationFailed);
+            showPushAlertMessageBelowCheckbox(R.string.push_alerts_registration_failed);
         }
     }
 
@@ -236,22 +236,22 @@ public class CurrentStatusFragment extends Fragment {
         @Override
         public void onError(Throwable e) {
             displayAsNoLongerChecking();
-            showError(getString(R.string.heatAdvisoryFetchError));
+            showError(getString(R.string.heat_advisory_fetch_error));
         }
     };
 
     private void displayAsChecking() {
         if (mRefreshMenuItem != null) {
-            if (mRefreshMenuItem.getActionView().findViewById(R.id.ivIcon).getAnimation() == null) {
-                mRefreshMenuItem.getActionView().findViewById(R.id.ivIcon).startAnimation(mRefreshRotation);
+            if (mRefreshMenuItem.getActionView().findViewById(R.id.actionIcon).getAnimation() == null) {
+                mRefreshMenuItem.getActionView().findViewById(R.id.actionIcon).startAnimation(mRefreshRotation);
             }
             mRefreshMenuItem.setEnabled(false);
         }
-        mAdvisoryStatus.setText(R.string.advisoryStatusChecking);
+        mAdvisoryStatus.setText(R.string.advisory_status_checking);
     }
     private void displayAsNoLongerChecking() {
         if (mRefreshMenuItem != null) {
-            mRefreshMenuItem.getActionView().findViewById(R.id.ivIcon).clearAnimation();
+            mRefreshMenuItem.getActionView().findViewById(R.id.actionIcon).clearAnimation();
             mRefreshMenuItem.setEnabled(true);
         }
     }

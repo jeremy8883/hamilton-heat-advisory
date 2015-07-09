@@ -37,7 +37,7 @@ public class MyGcmListenerService extends com.google.android.gms.gcm.GcmListener
             registrationComplete.putExtras(bundle);
             LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
         } catch (Exception e) {
-            new ErrorNotification(getString(R.string.gcmMessageReceiveError), "", this).show(); //This should never happen
+            new ErrorNotification(getString(R.string.gcm_message_receive_error), "", this).show(); //This should never happen
         }
 
     }

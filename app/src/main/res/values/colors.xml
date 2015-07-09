@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="brandCol1">#005F91</color>
-    <color name="brandCol2">#E8D3AE</color>
+    <color name="brand_col_1">#005F91</color>
+    <color name="brand_col_2">#E8D3AE</color>
     <color name="white">#FFFFFF</color>
 
-    <color name="buttonPressed">#55FFFFFF</color>
-    <color name="buttonFocused">#33FFFFFF</color>
+    <color name="button_pressed">#55FFFFFF</color>
+    <color name="button_focused">#33FFFFFF</color>
 </resources>
