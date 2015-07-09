@@ -25,12 +25,14 @@ import net.jeremycasey.hamiltonheatalert.R;
 import net.jeremycasey.hamiltonheatalert.app.gcm.GcmPreferenceKeys;
 import net.jeremycasey.hamiltonheatalert.app.gcm.MyGcmListenerService;
 import net.jeremycasey.hamiltonheatalert.app.gcm.RegistrationIntentService;
+import net.jeremycasey.hamiltonheatalert.app.heatstatus.LastHeatAlertPreferenceLogger;
 import net.jeremycasey.hamiltonheatalert.app.notifications.HeatStatusNotification;
 import net.jeremycasey.hamiltonheatalert.app.utils.PreferenceUtil;
 import net.jeremycasey.hamiltonheatalert.app.utils.RxUtil;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusFetcher;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusIsImportantChecker;
+import net.jeremycasey.hamiltonheatalert.heatstatus.LastFetchedHeatStatus;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -259,9 +261,14 @@ public class CurrentStatusFragment extends Fragment {
     private void displayHeatAdvisoryInfo(HeatStatus heatStatus) {
         mAdvisoryStatus.setText(heatStatus.getStageText().replace(" - ", "\r\n"));
         HeatStatusNotification heatStatusNotification = new HeatStatusNotification(heatStatus, getActivity());
-        if (new HeatStatusIsImportantChecker(heatStatus).isImportant()) {
+        LastHeatAlertPreferenceLogger logger = new LastHeatAlertPreferenceLogger(getActivity());
+        LastFetchedHeatStatus lastFetchedStatus = logger.getLastFetchedAndNotifiedHeatStatus();
+        LastFetchedHeatStatus newFetchedStatus = new LastFetchedHeatStatus(heatStatus);
+        if (new HeatStatusIsImportantChecker(heatStatus.getStage()).shouldNotify(lastFetchedStatus)) {
             heatStatusNotification.showNotification();
+            logger.logFetchedAndNotifiedStatus(newFetchedStatus);
         }
+        logger.logFetchedStatus(newFetchedStatus);
     }
 
     private void showPushAlertMessageBelowCheckbox(int resourceId) {

@@ -3,6 +3,7 @@ package net.jeremycasey.hamiltonheatalert.server;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusFetcher;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusIsImportantChecker;
+import net.jeremycasey.hamiltonheatalert.heatstatus.LastFetchedHeatStatus;
 import net.jeremycasey.hamiltonheatalert.utils.*;
 
 import java.lang.Exception;
@@ -34,16 +35,22 @@ public class Server {
     }
 
     private static void continuouslyCheckAlertStatusAndSendGcmMessageIfNecessary() {
-        int checkEveryMinutes = 5;
+        final int checkEveryMinutes = 5;
         log("Watcher started. The hamilton heat alert rss feed will be checked every " + checkEveryMinutes + " minutes.");
         while (true) {
             try {
                 HeatStatus heatStatus = new HeatStatusFetcher().run();
-                if (new HeatStatusIsImportantChecker(heatStatus).isImportant()) {
+                LastHeatAlertFileLogger logger = new LastHeatAlertFileLogger();
+                LastFetchedHeatStatus lastFetchedStatus = logger.getLastFetchedAndNotifiedHeatStatus();
+                LastFetchedHeatStatus newFetchedStatus = new LastFetchedHeatStatus(heatStatus);
+                HeatStatusIsImportantChecker checker = new HeatStatusIsImportantChecker(heatStatus.getStage());
+                if (checker.shouldNotify(lastFetchedStatus)) {
                     log("Sending alert to gcm for \"" + heatStatus.getStageText() + "\"");
                     new GcmSender(heatStatus).send();
+                    logger.logFetchedAndNotifiedStatus(newFetchedStatus);
                     log("Sent");
                 }
+                logger.logFetchedStatus(newFetchedStatus);
             } catch (Exception ex) {
                 log(StackTrace.toString(ex));
                 ErrorNotifier.notify(ex);

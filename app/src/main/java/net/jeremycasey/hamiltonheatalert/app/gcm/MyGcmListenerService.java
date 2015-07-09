@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
 import net.jeremycasey.hamiltonheatalert.R;
+import net.jeremycasey.hamiltonheatalert.app.heatstatus.LastHeatAlertPreferenceLogger;
 import net.jeremycasey.hamiltonheatalert.app.notifications.HeatStatusNotification;
 import net.jeremycasey.hamiltonheatalert.app.notifications.ErrorNotification;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusIsImportantChecker;
+import net.jeremycasey.hamiltonheatalert.heatstatus.LastFetchedHeatStatus;
 
 import com.google.gson.Gson;
 
@@ -27,9 +29,14 @@ public class MyGcmListenerService extends com.google.android.gms.gcm.GcmListener
             HeatStatus heatStatus = gson.fromJson(heatAdvisoryJson, HeatStatus.class);
 
             HeatStatusNotification heatStatusNotification = new HeatStatusNotification(heatStatus, this);
-            if (new HeatStatusIsImportantChecker(heatStatus).isImportant()) {
+            LastHeatAlertPreferenceLogger logger = new LastHeatAlertPreferenceLogger(this);
+            LastFetchedHeatStatus lastFetchedStatus = logger.getLastFetchedAndNotifiedHeatStatus();
+            LastFetchedHeatStatus newFetchedStatus = new LastFetchedHeatStatus(heatStatus);
+            if (new HeatStatusIsImportantChecker(heatStatus.getStage()).shouldNotify(lastFetchedStatus)) {
                 heatStatusNotification.showNotification();
+                logger.logFetchedAndNotifiedStatus(newFetchedStatus);
             }
+            logger.logFetchedStatus(newFetchedStatus);
 
             Intent registrationComplete = new Intent(NEW_ALERT_RECEIVED);
             Bundle bundle = new Bundle();

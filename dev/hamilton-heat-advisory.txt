@@ -1,33 +1,39 @@
+- Log when alerts are displayed and ensure notifications are not shown multiple times in one day - 1 hr
+- Rename HeatStatusIsImportantChecker to isSerious
+- Fix duplicated code for when notifications are displayed
+- Fetched status names are too long
+
+- Fix stage 3 warning text getting cut off
+- Delete WebRequestAsync and AsyncTaskResult
+- Show date last checked
+- On resume, the refreshing status is locked
+- Multiple topics to work based on dev or live
+
 - ensure that once installed play services, that everything registers
-- ensure evreything is using fixed dps
 
 - Rotating on the main fragment fails
-- Fix second refresh
-- Show disclaimer at beginning
 - Show error notification if couldn't subscribe
 - Ensure everything works smooth if no internet connection
 - Ensure everything works smooth if phone doesn't support gcm
 
-
-- Log when alerts are displayed and ensure notifications are not shown multiple times in one day - 1 hr
+- Maybe the push notification will work after refresh
 - clean up mainactivity fragment (use an update method instead) - 30 mins
 - Same but with the server app?
 - Error handling - make text red, show error if no internet for a while - 1 hr
 - Server error handling - 1 hr
-- Multiple topics to work based on dev or live
-- On resume, the refreshing status is locked
 - Show colour of warning
-- Fix refresh action button not with click state
 - Test if google play services not installed
 - Test if google play services not supported
 - Add disclaimer about everything works as is
+- Test what happens if subscription has been made, but gps is reinstalled. Are we still getting notifications?
 
 - Publish to app store
 
-- Show date last checked
+- Fix refresh action button to have tooltip
 - Precache the heat alert on the first time screen
 - Add android tests
 - Try out mockito
+- Try out Robolectric
 - Add disclaimer about reinstalling the app
 - Cache results for on rotate
 - Lay out the data a little nicer

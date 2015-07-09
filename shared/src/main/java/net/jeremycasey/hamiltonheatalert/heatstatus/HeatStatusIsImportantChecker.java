@@ -1,28 +1,25 @@
 package net.jeremycasey.hamiltonheatalert.heatstatus;
 
+import org.joda.time.DateTime;
+
 public class HeatStatusIsImportantChecker {
-    private HeatStatus mHeatStatus;
-    public HeatStatusIsImportantChecker(HeatStatus heatStatus) {
-        mHeatStatus = heatStatus;
+    private int mStage;
+
+    public HeatStatusIsImportantChecker(int stage) {
+        mStage = stage;
     }
 
-    //TODO
-    public boolean isImportant() {
-        return true;
-//        return dangerIsSeriousEnough() &&
-//                isTheHighestDangerLevelInThePastDay();
+    public boolean isSerious() {
+        return mStage > 0;
     }
-//
-//    private boolean dangerIsSeriousEnough() {
-//        return mHeatStatus.getStage() > 0;
-//    }
-//
-//    private boolean isTheHighestDangerLevelInThePastDay() {
-//        for (HeatStatus prevHeatAdvisory : getNotificationsSentInThePastDay()) {
-//            if (mHeatStatus.getStage() <= prevHeatAdvisory.getStage()) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
+
+    public boolean shouldNotify(LastFetchedHeatStatus lastNotifiedHeatStatus) {
+        return isSerious() && isDifferentFromTheLastUpdateInThePast18Hours(lastNotifiedHeatStatus);
+    }
+
+    private boolean isDifferentFromTheLastUpdateInThePast18Hours(LastFetchedHeatStatus lastNotifiedHeatStatus) {
+        return lastNotifiedHeatStatus == null ||
+                lastNotifiedHeatStatus.getDateTimeMillis() < new DateTime().minusHours(18).getMillis() ||
+                lastNotifiedHeatStatus.getStage() != mStage;
+    }
 }
