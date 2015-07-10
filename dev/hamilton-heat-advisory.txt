@@ -1,5 +1,4 @@
 - Error handling of heat fetch to not replace the heat status - 1 hr
-- Change current status to heat status - 1 min
 
 - Ensure everything works smooth if no internet connection - 5 min
 - Ensure everything works smooth if phone doesn't support gcm - 5min
