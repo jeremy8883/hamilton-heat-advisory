@@ -133,6 +133,10 @@ public class CurrentStatusFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.heatStatusPanel) void onHeatStatusClicked() {
+        fetchLatestHeatStatus();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
