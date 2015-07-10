@@ -26,11 +26,14 @@ import net.jeremycasey.hamiltonheatalert.app.gcm.GcmPreferenceKeys;
 import net.jeremycasey.hamiltonheatalert.app.gcm.MyGcmListenerService;
 import net.jeremycasey.hamiltonheatalert.app.gcm.RegistrationIntentService;
 import net.jeremycasey.hamiltonheatalert.app.heatstatus.HeatStatusNotifier;
+import net.jeremycasey.hamiltonheatalert.app.heatstatus.HeatStatusPreferenceLogger;
 import net.jeremycasey.hamiltonheatalert.app.utils.DateUtil;
 import net.jeremycasey.hamiltonheatalert.app.utils.PreferenceUtil;
 import net.jeremycasey.hamiltonheatalert.app.utils.RxUtil;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusFetcher;
+
+import org.joda.time.DateTime;
 
 import java.util.concurrent.TimeUnit;
 
@@ -82,8 +85,6 @@ public class CurrentStatusFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mPushAlertsCheckBox.setChecked(PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false));
-
-        fetchLatestHeatStatus();
     }
 
     @Override
@@ -134,6 +135,9 @@ public class CurrentStatusFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        cachedFetchLatestHeatStatus();
+
         mSubscriptions.add(
                 ContentObservable.fromLocalBroadcast(getActivity(), new IntentFilter(RegistrationIntentService.REGISTRATION_CHANGED))
                         .subscribe(new Action1<Intent>() {
@@ -243,6 +247,15 @@ public class CurrentStatusFragment extends Fragment {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(mOnHeatAlertFetched)
         );
+    }
+
+    private void cachedFetchLatestHeatStatus() {
+        mHeatStatus = new HeatStatusPreferenceLogger(getActivity()).getMostRecentStatus();
+        if (mHeatStatus == null || new DateTime(mHeatStatus.getFetchDate()).isBefore(new DateTime().minusMinutes(10))) {
+            fetchLatestHeatStatus();
+        } else {
+            updateHeatStatusDisplay();
+        }
     }
 
     private Observer<HeatStatus> mOnHeatAlertFetched = new Observer<HeatStatus>() {

@@ -2,6 +2,7 @@
 - Multiple topics to work based on dev or live
 
 - Error handling of heat fetch
+- Crash on rotate
 
 - ensure that once installed play services, that everything registers
 
@@ -23,6 +24,7 @@
 
 - Publish to app store
 
+- Clean up push notification checkbox
 - Check that everything is saved in unix time and displayed in local time
 - Fix refresh action button to have tooltip
 - Precache the heat alert on the first time screen
@@ -30,10 +32,10 @@
 - Try out mockito
 - Try out Robolectric
 - Add disclaimer about reinstalling the app
-- Cache results for on rotate
 - Lay out the data a little nicer
 - For registering/unregistering, use optimistic approach for checkbox
 - When getting a gcm message, send a broardcast of the response, and maybe use the same mechanism for the manual refresh
 - What happens to the GCM registration when there's an app update?
 - Refreshing icon to update based on actual status
 - Pebble / watch support
+- Are preferences cached? Will they block?
