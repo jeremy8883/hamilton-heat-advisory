@@ -1,29 +1,24 @@
-- On resume, the refreshing status is locked
+- Error handling of heat fetch to not replace the heat status
+
+- Ensure everything works smooth if no internet connection - 5 min
+- Ensure everything works smooth if phone doesn't support gcm - 5min
+- ensure that once installed play services, that everything registers - 5 mins
+
 - Multiple topics to work based on dev or live
 
-- Error handling of heat fetch
-- Crash on rotate
+-- Publish to app store
+-- Publish to an aws instance
 
-- ensure that once installed play services, that everything registers
-
-- Rotating on the main fragment fails
-- Show error notification if couldn't subscribe
-- Ensure everything works smooth if no internet connection
-- Ensure everything works smooth if phone doesn't support gcm
-
-- Maybe the push notification will work after refresh
-- clean up mainactivity fragment (use an update method instead) - 30 mins
-- Same but with the server app?
 - Error handling - make text red, show error if no internet for a while - 1 hr
 - Server error handling - 1 hr
 - Show colour of warning
-- Test if google play services not installed
-- Test if google play services not supported
 - Add disclaimer about everything works as is
 - Test what happens if subscription has been made, but gps is reinstalled. Are we still getting notifications?
 
-- Publish to app store
-
+- Prevent multiple refreshes
+- clean up mainactivity fragment (use an update method instead) - 30 mins
+- Same but with the server app?
+- Maybe the push notification will work after refresh...
 - Clean up push notification checkbox
 - Check that everything is saved in unix time and displayed in local time
 - Fix refresh action button to have tooltip

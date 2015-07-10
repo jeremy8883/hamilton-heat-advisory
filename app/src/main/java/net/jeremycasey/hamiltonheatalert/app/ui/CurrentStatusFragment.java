@@ -63,7 +63,6 @@ public class CurrentStatusFragment extends Fragment {
     private HeatStatus mHeatStatus = null;
 
     public CurrentStatusFragment() {
-        mSubscriptions = RxUtil.getNewCompositeSubIfUnsubscribed(mSubscriptions);
     }
 
     @Override
@@ -135,6 +134,7 @@ public class CurrentStatusFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mSubscriptions = RxUtil.getNewCompositeSubIfUnsubscribed(mSubscriptions);
 
         cachedFetchLatestHeatStatus();
 
@@ -241,12 +241,11 @@ public class CurrentStatusFragment extends Fragment {
 
     private void fetchLatestHeatStatus() {
         displayAsChecking();
-        mSubscriptions.add(
-                new HeatStatusFetcher().toObservable()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(mOnHeatAlertFetched)
-        );
+        Observable<HeatStatus> o = new HeatStatusFetcher().toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+        rx.Subscription s = o.subscribe(newHeatStatusFetchedListener());
+        mSubscriptions.add(s);
     }
 
     private void cachedFetchLatestHeatStatus() {
@@ -258,22 +257,24 @@ public class CurrentStatusFragment extends Fragment {
         }
     }
 
-    private Observer<HeatStatus> mOnHeatAlertFetched = new Observer<HeatStatus>() {
-        @Override
-        public void onNext(HeatStatus heatStatus) {
-            mHeatStatus = heatStatus;
-            displayAsNoLongerChecking();
-            updateHeatStatusDisplay();
-            new HeatStatusNotifier(getActivity()).logAndNotifyIfRequiered(heatStatus);
-        }
-        @Override
-        public void onCompleted() { }
-        @Override
-        public void onError(Throwable e) {
-            displayAsNoLongerChecking();
-            showError(getString(R.string.heat_advisory_fetch_error));
-        }
-    };
+    private Observer<HeatStatus> newHeatStatusFetchedListener() {
+        return new Observer<HeatStatus>() {
+            @Override
+            public void onNext(HeatStatus heatStatus) {
+                mHeatStatus = heatStatus;
+                displayAsNoLongerChecking();
+                updateHeatStatusDisplay();
+                new HeatStatusNotifier(getActivity()).logAndNotifyIfRequiered(heatStatus);
+            }
+            @Override
+            public void onCompleted() { }
+            @Override
+            public void onError(Throwable e) {
+                displayAsNoLongerChecking();
+                showError(getString(R.string.heat_advisory_fetch_error));
+            }
+        };
+    }
 
     private void displayAsChecking() {
         if (mRefreshMenuItem != null) {
