@@ -3,6 +3,7 @@ package net.jeremycasey.hamiltonheatalert.app.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -40,6 +41,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import rx.Observable;
 import rx.Observer;
 import rx.android.content.ContentObservable;
@@ -122,6 +125,7 @@ public class CurrentStatusFragment extends Fragment {
     }
 
     @OnClick(R.id.pushAlertsCheckBox) void onPushAlertCheckboxChange() {
+        Crouton.cancelAllCroutons();
         if (mPushAlertsCheckBox.isChecked()) {
             registerForGcm();
         } else {
@@ -242,6 +246,7 @@ public class CurrentStatusFragment extends Fragment {
     }
 
     private void fetchLatestHeatStatus() {
+        Crouton.cancelAllCroutons();
         displayAsChecking();
         Observable<HeatStatus> o = new HeatStatusFetcher().toObservable()
                 .subscribeOn(Schedulers.io())
@@ -319,7 +324,8 @@ public class CurrentStatusFragment extends Fragment {
 
     private void showError(String text) {
         Log.e("MainActivity", text);
-        mAdvisoryStatus.setText(text);
+
+        Crouton.makeText(getActivity(), text, Style.ALERT).show();
     }
 
     public void onGcmMessageReceived(Intent intent) {

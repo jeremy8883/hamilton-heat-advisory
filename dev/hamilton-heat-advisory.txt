@@ -1,4 +1,4 @@
-- Error handling of heat fetch to not replace the heat status - 1 hr
+- Make heat status clickable for refresh
 
 - Ensure everything works smooth if no internet connection - 5 min
 - Ensure everything works smooth if phone doesn't support gcm - 5min
@@ -36,3 +36,4 @@
 - Pebble / watch support
 - Are preferences cached? Will they block?
 - Error icon to be different
+- Show heat status in red if too old

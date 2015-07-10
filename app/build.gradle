@@ -33,6 +33,9 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.jakewharton:butterknife:7.0.0'
     compile 'io.reactivex:rxandroid:0.25.0'
+    compile('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
+        exclude group: 'com.google.android', module: 'support-v4'
+    }
     compile project(':shared')
     testCompile 'junit:junit:4.12'
 }

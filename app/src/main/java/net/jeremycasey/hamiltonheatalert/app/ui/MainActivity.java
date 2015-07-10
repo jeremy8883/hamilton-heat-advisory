@@ -14,6 +14,8 @@ import net.jeremycasey.hamiltonheatalert.app.gcm.GcmPreferenceKeys;
 import net.jeremycasey.hamiltonheatalert.app.notifications.HeatStatusNotification;
 import net.jeremycasey.hamiltonheatalert.app.utils.PreferenceUtil;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+
 
 public class MainActivity extends ActionBarActivity implements FirstTimeSubscribeFragment.OnDoneCallback {
 
@@ -43,6 +45,12 @@ public class MainActivity extends ActionBarActivity implements FirstTimeSubscrib
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Crouton.cancelAllCroutons();
     }
 
     private boolean checkPlayServicesAndShowAlertsIfNecessary() {

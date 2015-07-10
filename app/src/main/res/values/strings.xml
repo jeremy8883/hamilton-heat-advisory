@@ -4,7 +4,7 @@
     <string name="city_of_hamilton_heat_advisory">City of Hamilton Heat Advisory</string>
     <string name="current_status">Heat status:</string>
     <string name="advisory_status_unknown">Unknown</string>
-    <string name="heat_advisory_fetch_error">There was a problem fetching the heat advisory data</string>
+    <string name="heat_advisory_fetch_error">There was a problem fetching the latest heat status</string>
     <string name="advisory_status_checking">...</string>
     <string name="refresh_button">Refresh</string>
     <string name="refresh_button_checking">Checking...</string>
