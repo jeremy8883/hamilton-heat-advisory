@@ -47,7 +47,7 @@ public class RegistrationIntentService extends IntentService {
                     unsubscribeTopics(token);
                 }
 
-                PreferenceUtil.put(this, GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, true);
+                PreferenceUtil.put(this, GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, isSubscription);
 
                 //Once the first automatic registration is complete, the (un)registration is manual from then on
                 PreferenceUtil.put(this, GcmPreferenceKeys.REGISTER_AUTOMATICALLY_ON_LOAD, false);

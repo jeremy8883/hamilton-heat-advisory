@@ -82,8 +82,6 @@ public class CurrentStatusFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mPushAlertsCheckBox.setChecked(PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false));
     }
 
     @Override
@@ -135,7 +133,9 @@ public class CurrentStatusFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mSubscriptions = RxUtil.getNewCompositeSubIfUnsubscribed(mSubscriptions);
+        mPushAlertsCheckBox.setChecked(PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false));
 
+        updatePlayServicesSupported();
         cachedFetchLatestHeatStatus();
 
         mSubscriptions.add(
@@ -188,7 +188,7 @@ public class CurrentStatusFragment extends Fragment {
         ButterKnife.unbind(getActivity());
     }
 
-    private boolean checkPlayServices() {
+    private boolean updatePlayServicesSupported() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
@@ -201,8 +201,10 @@ public class CurrentStatusFragment extends Fragment {
             mPushAlertsCheckBox.setChecked(false);
 
             return false;
+        } else {
+            mPushAlertsCheckBox.setEnabled(true);
+            return true;
         }
-        return true;
     }
 
     private void registerForGcm() {

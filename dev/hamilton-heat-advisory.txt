@@ -1,10 +1,12 @@
-- Error handling of heat fetch to not replace the heat status
+- Error handling of heat fetch to not replace the heat status - 1 hr
+- Change current status to heat status - 1 min
 
 - Ensure everything works smooth if no internet connection - 5 min
 - Ensure everything works smooth if phone doesn't support gcm - 5min
 - ensure that once installed play services, that everything registers - 5 mins
+- Ensure that unsubscribing offline will actually unsubscribe
 
-- Multiple topics to work based on dev or live
+- Multiple topics to work based on dev or live - 30 mins
 
 -- Publish to app store
 -- Publish to an aws instance
@@ -34,3 +36,4 @@
 - Refreshing icon to update based on actual status
 - Pebble / watch support
 - Are preferences cached? Will they block?
+- Error icon to be different
