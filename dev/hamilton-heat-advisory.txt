@@ -1,4 +1,5 @@
 - Show date last checked
+- Last checked to also tick
 - On resume, the refreshing status is locked
 - Multiple topics to work based on dev or live
 
@@ -22,6 +23,7 @@
 
 - Publish to app store
 
+- Check that everything is saved in unix time and displayed in local time
 - Fix refresh action button to have tooltip
 - Precache the heat alert on the first time screen
 - Add android tests

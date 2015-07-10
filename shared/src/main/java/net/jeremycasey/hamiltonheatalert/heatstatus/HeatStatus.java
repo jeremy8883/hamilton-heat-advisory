@@ -11,6 +11,7 @@ public class HeatStatus implements Serializable {
     private int stage;
     private String imageUrl;
     private long lastBuildDate;
+    private long fetchDate;
 
 
     public void setStageText(String stageText) {
@@ -57,16 +58,15 @@ public class HeatStatus implements Serializable {
         return heatStatus;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        HeatStatus hs = (HeatStatus)o;
-        return equals(hs.getImageUrl(), getImageUrl()) &&
-            equals(hs.getLastBuildDate(), getLastBuildDate()) &&
-            equals(hs.getStageText(), getStageText()) &&
-            hs.getStage() == getStage();
-    }
-
     private boolean equals(Object o1, Object o2) {
         return o1 == null ? o2 == null : o1.equals(o2);
+    }
+
+    public long getFetchDate() {
+        return fetchDate;
+    }
+
+    public void setFetchDate(long fetchDate) {
+        this.fetchDate = fetchDate;
     }
 }

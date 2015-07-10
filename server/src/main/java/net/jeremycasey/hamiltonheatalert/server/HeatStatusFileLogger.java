@@ -3,7 +3,7 @@ package net.jeremycasey.hamiltonheatalert.server;
 
 import com.google.gson.Gson;
 
-import net.jeremycasey.hamiltonheatalert.heatstatus.LoggedHeatStatus;
+import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusLogger;
 
 import org.apache.commons.io.FileUtils;
@@ -17,26 +17,26 @@ public class HeatStatusFileLogger implements HeatStatusLogger {
     public HeatStatusFileLogger() { }
 
     @Override
-    public void setMostRecentStatus(LoggedHeatStatus heatStatusToLog) {
+    public void setMostRecentStatus(HeatStatus heatStatusToLog) {
         FetchedHeatStatuses fetchedHeatStatuses = getFetchedHeatStatuses();
         fetchedHeatStatuses.setLastFetchedHeatStatus(heatStatusToLog);
         writeFetchedHeatStatuses(fetchedHeatStatuses);
     }
 
     @Override
-    public void setLastNotifiedStatus(LoggedHeatStatus heatStatusToLog) {
+    public void setLastNotifiedStatus(HeatStatus heatStatusToLog) {
         FetchedHeatStatuses fetchedHeatStatuses = getFetchedHeatStatuses();
         fetchedHeatStatuses.setLastFetchedAndNotifiedHeatStatus(heatStatusToLog);
         writeFetchedHeatStatuses(fetchedHeatStatuses);
     }
 
     @Override
-    public LoggedHeatStatus getMostRecentStatus() {
+    public HeatStatus getMostRecentStatus() {
         return getFetchedHeatStatuses().getLastFetchedHeatStatus();
     }
 
     @Override
-    public LoggedHeatStatus getLastNotifiedStatus() {
+    public HeatStatus getLastNotifiedStatus() {
         return getFetchedHeatStatuses().getLastFetchedAndNotifiedHeatStatus();
     }
 
@@ -66,22 +66,22 @@ public class HeatStatusFileLogger implements HeatStatusLogger {
     }
 
     public class FetchedHeatStatuses {
-        private LoggedHeatStatus lastFetchedHeatStatus = null;
-        private LoggedHeatStatus lastFetchedAndNotifiedHeatStatus = null;
+        private HeatStatus lastFetchedHeatStatus = null;
+        private HeatStatus lastFetchedAndNotifiedHeatStatus = null;
 
-        public LoggedHeatStatus getLastFetchedAndNotifiedHeatStatus() {
+        public HeatStatus getLastFetchedAndNotifiedHeatStatus() {
             return lastFetchedAndNotifiedHeatStatus;
         }
 
-        public void setLastFetchedAndNotifiedHeatStatus(LoggedHeatStatus lastFetchedAndNotifiedHeatStatus) {
+        public void setLastFetchedAndNotifiedHeatStatus(HeatStatus lastFetchedAndNotifiedHeatStatus) {
             this.lastFetchedAndNotifiedHeatStatus = lastFetchedAndNotifiedHeatStatus;
         }
 
-        public LoggedHeatStatus getLastFetchedHeatStatus() {
+        public HeatStatus getLastFetchedHeatStatus() {
             return lastFetchedHeatStatus;
         }
 
-        public void setLastFetchedHeatStatus(LoggedHeatStatus lastFetchedHeatStatus) {
+        public void setLastFetchedHeatStatus(HeatStatus lastFetchedHeatStatus) {
             this.lastFetchedHeatStatus = lastFetchedHeatStatus;
         }
     }

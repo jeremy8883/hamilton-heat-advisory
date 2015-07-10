@@ -4,16 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.google.gson.Gson;
+
 import net.jeremycasey.hamiltonheatalert.R;
 import net.jeremycasey.hamiltonheatalert.app.heatstatus.HeatStatusNotifier;
-import net.jeremycasey.hamiltonheatalert.app.heatstatus.HeatStatusPreferenceLogger;
-import net.jeremycasey.hamiltonheatalert.app.notifications.HeatStatusNotification;
 import net.jeremycasey.hamiltonheatalert.app.notifications.ErrorNotification;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
-import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusIsImportantChecker;
-import net.jeremycasey.hamiltonheatalert.heatstatus.LoggedHeatStatus;
-
-import com.google.gson.Gson;
 
 //This service is started automatically
 public class MyGcmListenerService extends com.google.android.gms.gcm.GcmListenerService {

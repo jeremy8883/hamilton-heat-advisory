@@ -5,9 +5,9 @@ package net.jeremycasey.hamiltonheatalert.heatstatus;
  * sent and received
  */
 public interface HeatStatusLogger {
-    void setMostRecentStatus(LoggedHeatStatus loggedHeatAlert);
-    void setLastNotifiedStatus(LoggedHeatStatus loggedHeatAlert);
-    LoggedHeatStatus getMostRecentStatus();
-    LoggedHeatStatus getLastNotifiedStatus();
+    void setMostRecentStatus(HeatStatus heatStatus);
+    void setLastNotifiedStatus(HeatStatus heatStatus);
+    HeatStatus getMostRecentStatus();
+    HeatStatus getLastNotifiedStatus();
 }
 

@@ -13,13 +13,13 @@ public class HeatStatusIsImportantChecker {
         return mStage > 0;
     }
 
-    public boolean shouldNotify(LoggedHeatStatus lastNotifiedHeatStatus) {
+    public boolean shouldNotify(HeatStatus lastNotifiedHeatStatus) {
         return isImportant() && isDifferentFromTheLastUpdateInThePast18Hours(lastNotifiedHeatStatus);
     }
 
-    private boolean isDifferentFromTheLastUpdateInThePast18Hours(LoggedHeatStatus lastNotifiedHeatStatus) {
+    private boolean isDifferentFromTheLastUpdateInThePast18Hours(HeatStatus lastNotifiedHeatStatus) {
         return lastNotifiedHeatStatus == null ||
-                lastNotifiedHeatStatus.getDateTimeMillis() < new DateTime().minusHours(18).getMillis() ||
+                lastNotifiedHeatStatus.getFetchDate() < new DateTime().minusHours(18).getMillis() ||
                 lastNotifiedHeatStatus.getStage() != mStage;
     }
 }
