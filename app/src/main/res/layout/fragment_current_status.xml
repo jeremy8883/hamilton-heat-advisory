@@ -18,7 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:id="@+id/heatStatusPanel">
 
         <TextView android:text="@string/current_status" android:layout_width="wrap_content"
             android:layout_height="wrap_content"

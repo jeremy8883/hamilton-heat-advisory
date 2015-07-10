@@ -51,6 +51,7 @@ public class CurrentStatusFragment extends Fragment {
     @Bind(R.id.pushAlertsMessage) TextView mPushAlertsMessage;
     @Bind(R.id.lastChecked) TextView mLastCheckedCheckBox;
     @Bind(R.id.pushAlertsCheckBox) CheckBox mPushAlertsCheckBox;
+    @Bind(R.id.heatStatusPanel) ViewGroup mHeatStatusPanel;
     private MenuItem mRefreshMenuItem = null;
     private Animation mRefreshRotation = null;
 
@@ -268,13 +269,14 @@ public class CurrentStatusFragment extends Fragment {
             }
             mRefreshMenuItem.setEnabled(false);
         }
-        mAdvisoryStatus.setText(R.string.advisory_status_checking);
+        mHeatStatusPanel.setAlpha(0.4f);
     }
     private void displayAsNoLongerChecking() {
         if (mRefreshMenuItem != null) {
             mRefreshMenuItem.getActionView().findViewById(R.id.actionIcon).clearAnimation();
             mRefreshMenuItem.setEnabled(true);
         }
+        mHeatStatusPanel.setAlpha(1f);
     }
 
     private void updateHeatStatusDisplay() {
