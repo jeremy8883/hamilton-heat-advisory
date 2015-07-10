@@ -26,14 +26,18 @@ import net.jeremycasey.hamiltonheatalert.app.gcm.GcmPreferenceKeys;
 import net.jeremycasey.hamiltonheatalert.app.gcm.MyGcmListenerService;
 import net.jeremycasey.hamiltonheatalert.app.gcm.RegistrationIntentService;
 import net.jeremycasey.hamiltonheatalert.app.heatstatus.HeatStatusNotifier;
+import net.jeremycasey.hamiltonheatalert.app.utils.DateUtil;
 import net.jeremycasey.hamiltonheatalert.app.utils.PreferenceUtil;
 import net.jeremycasey.hamiltonheatalert.app.utils.RxUtil;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusFetcher;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observable;
 import rx.Observer;
 import rx.android.content.ContentObservable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -44,12 +48,15 @@ import rx.subscriptions.CompositeSubscription;
 
 public class CurrentStatusFragment extends Fragment {
     @Bind(R.id.advisoryStatus) TextView mAdvisoryStatus;
-    @Bind(R.id.pushAlertsMessage) TextView pushAlertsMessage;
-    @Bind(R.id.pushAlertsCheckBox) CheckBox pushAlertsCheckBox;
+    @Bind(R.id.pushAlertsMessage) TextView mPushAlertsMessage;
+    @Bind(R.id.lastChecked) TextView mLastCheckedCheckBox;
+    @Bind(R.id.pushAlertsCheckBox) CheckBox mPushAlertsCheckBox;
     private MenuItem mRefreshMenuItem = null;
     private Animation mRefreshRotation = null;
 
     private CompositeSubscription mSubscriptions = new CompositeSubscription();
+
+    private HeatStatus mHeatStatus = null;
 
     public CurrentStatusFragment() {
         mSubscriptions = RxUtil.getNewCompositeSubIfUnsubscribed(mSubscriptions);
@@ -73,9 +80,9 @@ public class CurrentStatusFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        pushAlertsCheckBox.setChecked(PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false));
+        mPushAlertsCheckBox.setChecked(PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false));
 
-        updateAdvisoryStatus();
+        fetchLatestHeatStatus();
     }
 
     @Override
@@ -109,14 +116,14 @@ public class CurrentStatusFragment extends Fragment {
         int id = item.getItemId();
         switch (id) {
             case R.id.menuActionRefresh:
-                updateAdvisoryStatus();
+                fetchLatestHeatStatus();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.pushAlertsCheckBox) void onPushAlertCheckboxChange() {
-        if (pushAlertsCheckBox.isChecked()) {
+        if (mPushAlertsCheckBox.isChecked()) {
             registerForGcm();
         } else {
             unregisterForGcm();
@@ -149,6 +156,19 @@ public class CurrentStatusFragment extends Fragment {
                             }
                         })
         );
+
+        //Take care of date last checked
+        mSubscriptions.add(
+                Observable.interval(10, TimeUnit.SECONDS)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<Long>() {
+                            @Override
+                            public void call(Long aLong) {
+                                updateHeatStatusDisplay();
+                            }
+                        })
+        );
     }
 
     @Override
@@ -172,8 +192,8 @@ public class CurrentStatusFragment extends Fragment {
                 showPushAlertMessageBelowCheckbox(R.string.error_google_play_services_not_supported);
             }
 
-            pushAlertsCheckBox.setEnabled(false);
-            pushAlertsCheckBox.setChecked(false);
+            mPushAlertsCheckBox.setEnabled(false);
+            mPushAlertsCheckBox.setChecked(false);
 
             return false;
         }
@@ -181,40 +201,40 @@ public class CurrentStatusFragment extends Fragment {
     }
 
     private void registerForGcm() {
-        pushAlertsCheckBox.setChecked(true);
-        pushAlertsCheckBox.setEnabled(false);
+        mPushAlertsCheckBox.setChecked(true);
+        mPushAlertsCheckBox.setEnabled(false);
         showPushAlertMessageBelowCheckbox(R.string.registering_for_push_notifications_now_please_wait);
         RegistrationIntentService.start(getActivity(), true);
         //mOnGcmRegistrtionResponse callback is (un)registered at onResume and onPause
     }
 
     private void unregisterForGcm() {
-        pushAlertsCheckBox.setChecked(false);
-        pushAlertsCheckBox.setEnabled(false);
+        mPushAlertsCheckBox.setChecked(false);
+        mPushAlertsCheckBox.setEnabled(false);
         showPushAlertMessageBelowCheckbox(R.string.unregistering_push_notifications_please_wait);
         RegistrationIntentService.start(getActivity(), false);
         //mOnGcmUnregistrtionResponse callback is (un)registered at onResume and onPause
     }
 
     public void onGcmRegistrationResponse() {
-        pushAlertsCheckBox.setEnabled(true);
+        mPushAlertsCheckBox.setEnabled(true);
         boolean sentToken = PreferenceUtil.getBoolean(getActivity(), GcmPreferenceKeys.SENT_TOKEN_TO_SERVER, false);
         if (sentToken) {
-            pushAlertsCheckBox.setChecked(true);
+            mPushAlertsCheckBox.setChecked(true);
             hidePushAlertMessageBelowCheckbox();
         } else {
-            pushAlertsCheckBox.setChecked(false);
+            mPushAlertsCheckBox.setChecked(false);
             showPushAlertMessageBelowCheckbox(R.string.push_alerts_registration_failed);
         }
     }
 
     private void onGcmUnregistrtionResponse() {
         hidePushAlertMessageBelowCheckbox();
-        pushAlertsCheckBox.setEnabled(true);
-        pushAlertsCheckBox.setChecked(false);
+        mPushAlertsCheckBox.setEnabled(true);
+        mPushAlertsCheckBox.setChecked(false);
     }
 
-    private void updateAdvisoryStatus() {
+    private void fetchLatestHeatStatus() {
         displayAsChecking();
         mSubscriptions.add(
                 new HeatStatusFetcher().toObservable()
@@ -227,8 +247,9 @@ public class CurrentStatusFragment extends Fragment {
     private Observer<HeatStatus> mOnHeatAlertFetched = new Observer<HeatStatus>() {
         @Override
         public void onNext(HeatStatus heatStatus) {
+            mHeatStatus = heatStatus;
             displayAsNoLongerChecking();
-            displayHeatAdvisoryInfo(heatStatus);
+            updateHeatStatusDisplay();
             new HeatStatusNotifier(getActivity()).logAndNotifyIfRequiered(heatStatus);
         }
         @Override
@@ -256,17 +277,26 @@ public class CurrentStatusFragment extends Fragment {
         }
     }
 
-    private void displayHeatAdvisoryInfo(HeatStatus heatStatus) {
-        mAdvisoryStatus.setText(heatStatus.getStageText().replace(" - ", "\r\n"));
+    private void updateHeatStatusDisplay() {
+        if (mHeatStatus == null) {
+            mAdvisoryStatus.setText(R.string.advisory_status_checking);
+            mLastCheckedCheckBox.setText("");
+        } else {
+            mAdvisoryStatus.setText(mHeatStatus.getStageText().replace(" - ", "\r\n"));
+            String lastChecked = DateUtil.toRelativeString(mHeatStatus.getFetchDate());
+            mLastCheckedCheckBox.setText(
+                String.format(getActivity().getString(R.string.last_checked), lastChecked.toLowerCase())
+            );
+        }
     }
 
     private void showPushAlertMessageBelowCheckbox(int resourceId) {
-        pushAlertsMessage.setText(getActivity().getString(resourceId));
-        pushAlertsMessage.setVisibility(View.VISIBLE);
+        mPushAlertsMessage.setText(getActivity().getString(resourceId));
+        mPushAlertsMessage.setVisibility(View.VISIBLE);
     }
 
     private void hidePushAlertMessageBelowCheckbox() {
-        pushAlertsMessage.setVisibility(View.GONE);
+        mPushAlertsMessage.setVisibility(View.GONE);
     }
 
     private void showError(String text) {
@@ -275,9 +305,11 @@ public class CurrentStatusFragment extends Fragment {
     }
 
     public void onGcmMessageReceived(Intent intent) {
-        displayAsNoLongerChecking();
         Bundle extras = intent.getExtras();
-        HeatStatus heatStatus = (HeatStatus)extras.getSerializable("heatStatus");
-        displayHeatAdvisoryInfo(heatStatus);
+
+        mHeatStatus = (HeatStatus)extras.getSerializable("heatStatus");
+
+        displayAsNoLongerChecking();
+        updateHeatStatusDisplay();
     }
 }

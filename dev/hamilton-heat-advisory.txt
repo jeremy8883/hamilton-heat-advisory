@@ -1,7 +1,8 @@
-- Show date last checked
-- Last checked to also tick
 - On resume, the refreshing status is locked
 - Multiple topics to work based on dev or live
+
+- Don't hide heat status when checking, just make transparent
+- Error handling of heat fetch
 
 - ensure that once installed play services, that everything registers
 

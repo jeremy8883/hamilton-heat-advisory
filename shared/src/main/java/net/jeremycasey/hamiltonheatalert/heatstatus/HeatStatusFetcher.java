@@ -1,6 +1,8 @@
 package net.jeremycasey.hamiltonheatalert.heatstatus;
 
 import net.jeremycasey.hamiltonheatalert.utils.WebRequest;
+
+import org.joda.time.DateTime;
 import org.xml.sax.SAXException;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,7 +21,9 @@ public class HeatStatusFetcher {
     public HeatStatus run() throws IOException, ParserConfigurationException, SAXException {
         mWebRequest = new WebRequest(RSS_URL);
         String xml = mWebRequest.run();
-        return convertXmlToHeatAdvisory(xml);
+        HeatStatus heatStatus = convertXmlToHeatAdvisory(xml);
+        heatStatus.setFetchDate(new DateTime().getMillis());
+        return heatStatus;
     }
 
     public void cancel() {

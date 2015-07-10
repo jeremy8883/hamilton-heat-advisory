@@ -31,4 +31,5 @@
     <string name="ok">OK</string>
     <string name="push_not_supported_dialog_title">Push notification error</string>
     <string name="push_not_supported_dialog_text">You are unable to subscribe to heat alerts because your device does not support them.</string>
+    <string name="last_checked">Last checked %s</string>
 </resources>
