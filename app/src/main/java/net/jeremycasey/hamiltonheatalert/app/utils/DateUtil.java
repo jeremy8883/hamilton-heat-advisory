@@ -27,4 +27,12 @@ public class DateUtil {
     private static String plural(String strSingle, String strPlural, int amount) {
         return String.format(amount == 1 ? strSingle : strPlural, amount);
     }
+
+    public static boolean isWithinDaysAgo(long dateTime, int numDays) {
+        return new DateTime(dateTime).isAfter(DateTime.now().minusHours(numDays));
+    }
+
+    public static boolean isWithinMinsAgo(long dateTime, int numMins) {
+        return new DateTime(dateTime).isAfter(DateTime.now().minusMinutes(numMins));
+    }
 }

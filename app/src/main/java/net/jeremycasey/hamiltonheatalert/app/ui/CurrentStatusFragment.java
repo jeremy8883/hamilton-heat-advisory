@@ -3,7 +3,6 @@ package net.jeremycasey.hamiltonheatalert.app.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,8 +32,6 @@ import net.jeremycasey.hamiltonheatalert.app.utils.PreferenceUtil;
 import net.jeremycasey.hamiltonheatalert.app.utils.RxUtil;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusFetcher;
-
-import org.joda.time.DateTime;
 
 import java.util.concurrent.TimeUnit;
 
@@ -260,12 +257,20 @@ public class CurrentStatusFragment extends Fragment {
     }
 
     private void cachedFetchLatestHeatStatus() {
-        mHeatStatus = new HeatStatusPreferenceLogger(getActivity()).getMostRecentStatus();
-        if (mHeatStatus == null || new DateTime(mHeatStatus.getFetchDate()).isBefore(new DateTime().minusMinutes(10))) {
+        mHeatStatus = getMostRecentStatusIfLessThanADayOld();
+
+        updateHeatStatusDisplay();
+        if (mHeatStatus == null || !DateUtil.isWithinMinsAgo(mHeatStatus.getFetchDate(), 10)) {
             fetchLatestHeatStatus();
-        } else {
-            updateHeatStatusDisplay();
         }
+    }
+
+    private HeatStatus getMostRecentStatusIfLessThanADayOld() {
+        HeatStatus heatStatus = new HeatStatusPreferenceLogger(getActivity()).getMostRecentStatus();
+        if (heatStatus != null && DateUtil.isWithinDaysAgo(heatStatus.getFetchDate(), 1)) {
+            return heatStatus;
+        }
+        return null;
     }
 
     private Observer<HeatStatus> newHeatStatusFetchedListener() {
@@ -312,7 +317,7 @@ public class CurrentStatusFragment extends Fragment {
             mAdvisoryStatus.setText(mHeatStatus.getStageText().replace(" - ", "\r\n"));
             String lastChecked = DateUtil.toRelativeString(mHeatStatus.getFetchDate());
             mLastCheckedCheckBox.setText(
-                String.format(getActivity().getString(R.string.last_checked), lastChecked.toLowerCase())
+                    String.format(getActivity().getString(R.string.last_checked), lastChecked.toLowerCase())
             );
         }
     }
