@@ -32,4 +32,7 @@
     <string name="push_not_supported_dialog_title">Push notification error</string>
     <string name="push_not_supported_dialog_text">You are unable to subscribe to heat alerts because your device does not support them.</string>
     <string name="last_checked">Last checked %s</string>
+    <string name="disclaimer_menu">Disclaimer</string>
+    <string name="disclaimer">Heat alerts are pulled from the city of Hamilton's rss feed at http://old.hamilton.ca/databases/phcs/heatalert/heatevent.xml.\n\nThis software and the accompanying files are sold "as is" and without warranties as to performance or merchantability or any other warranties whether expressed or implied. This disclaimer concerns all files generated and edited by Hamilton Heat Alert as well.</string>
+    <string name="website_menu">Heat Alert Website</string>
 </resources>

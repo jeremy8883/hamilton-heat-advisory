@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -89,5 +92,28 @@ public class MainActivity extends ActionBarActivity implements FirstTimeSubscrib
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.mainFragmentHolder, newFragment, tag);
         transaction.commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.menuDisclaimer:
+                showDisclaimer();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showDisclaimer() {
+        new DisclaimerDialog()
+                .show(getSupportFragmentManager(), null);
     }
 }
