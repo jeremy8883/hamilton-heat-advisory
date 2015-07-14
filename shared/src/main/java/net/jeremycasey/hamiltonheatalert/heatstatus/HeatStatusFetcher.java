@@ -12,7 +12,7 @@ import rx.Subscriber;
 
 public class HeatStatusFetcher {
 
-    private static final String RSS_URL = "http://old.hamilton.ca/databases/phcs/heatalert/heatevent.xml";
+    public static final String RSS_URL = "http://old.hamilton.ca/databases/phcs/heatalert/heatevent.xml";
     private WebRequest mWebRequest = null;
 
     public HeatStatusFetcher() {
