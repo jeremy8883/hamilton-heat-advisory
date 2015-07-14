@@ -1,8 +1,11 @@
 package net.jeremycasey.hamiltonheatalert.server;
 
+import net.jeremycasey.hamiltonheatalert.datetime.SystemTimeProvider;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusFetcher;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusIsImportantChecker;
+import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusLogger;
+import net.jeremycasey.hamiltonheatalert.heatstatus.ServerHeatStatusIsImportantChecker;
 import net.jeremycasey.hamiltonheatalert.utils.*;
 
 import java.lang.Exception;
@@ -40,11 +43,10 @@ public class Server {
             try {
                 HeatStatus heatStatus = new HeatStatusFetcher().run();
 
-                HeatStatusFileLogger logger = new HeatStatusFileLogger();
-                HeatStatus lastNotifiedStatus = logger.getLastNotifiedStatus();
-                HeatStatusIsImportantChecker checker = new HeatStatusIsImportantChecker(heatStatus.getStage());
+                HeatStatusLogger logger = new HeatStatusFileLogger();
+                HeatStatusIsImportantChecker checker = new ServerHeatStatusIsImportantChecker(heatStatus.getStage(), new SystemTimeProvider());
 
-                if (checker.shouldNotify(lastNotifiedStatus)) {
+                if (checker.shouldNotify(logger)) {
                     log("Sending alert to gcm for \"" + heatStatus.getStageText() + "\"");
                     new GcmSender(heatStatus).send();
                     logger.setLastNotifiedStatus(heatStatus);

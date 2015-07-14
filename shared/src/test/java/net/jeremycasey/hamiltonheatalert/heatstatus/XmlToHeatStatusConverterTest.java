@@ -30,12 +30,15 @@ public class XmlToHeatStatusConverterTest {
                 "        </item>\n" +
                 "    </channel>\n" +
                 "\t</rss> ";
-        HeatStatus ha = new HeatStatus();
-        ha.setStageText("Monitoring - Stage 0");
-        ha.setStage(0);
-        ha.setImageUrl("http://old.hamilton.ca/databases/phcs/heatalert/current1.jpg");
-        ha.setLastBuildDate(new DateTime(2015, 5, 19, 14, 52, 42).getMillis()); //TODO: what time zome is this?
+        HeatStatus fetchedHeatStatus = new XmlToHeatStatusConverter(xml).run();
 
-        assertEquals(ha, new XmlToHeatStatusConverter(xml).run());
+        HeatStatus heatStatus = new HeatStatus();
+        heatStatus.setStageText("Monitoring - Stage 0");
+        heatStatus.setStage(0);
+        heatStatus.setImageUrl("http://old.hamilton.ca/databases/phcs/heatalert/current1.jpg");
+        heatStatus.setLastBuildDate(new DateTime(2015, 5, 19, 14, 52, 42).getMillis()); //TODO: what time zome is this?
+        heatStatus.setFetchDate(fetchedHeatStatus.getFetchDate()); //We won't test the date
+
+        assertEquals(heatStatus, fetchedHeatStatus);
     }
 }

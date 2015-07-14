@@ -54,7 +54,9 @@ public class HeatStatus implements Serializable {
         heatStatus.setStageText(stageTexts[stage] + " - Stage " + stage);
         heatStatus.setStage(stage);
         heatStatus.setImageUrl("http://old.hamilton.ca/databases/phcs/heatalert/current1.jpg");
-        heatStatus.setLastBuildDate(new DateTime().getMillis());
+        long now = DateTime.now().getMillis();
+        heatStatus.setLastBuildDate(now);
+        heatStatus.setFetchDate(now);
         return heatStatus;
     }
 

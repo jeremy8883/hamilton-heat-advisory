@@ -1,8 +1,8 @@
-
-- Ensure everything works smooth if no internet connection - 5 min
+- Fix logic for heat status notifications
 - Ensure everything works smooth if phone doesn't support gcm - 5min
 - ensure that once installed play services, that everything registers - 5 mins
 - Ensure that unsubscribing offline will actually unsubscribe
+- Add disclaimer about everything works as is
 
 - Multiple topics to work based on dev or live - 30 mins
 
@@ -12,7 +12,6 @@
 - Error handling - make text red, show error if no internet for a while - 1 hr
 - Server error handling - 1 hr
 - Show colour of warning
-- Add disclaimer about everything works as is
 - Test what happens if subscription has been made, but gps is reinstalled. Are we still getting notifications?
 
 - Prevent multiple refreshes

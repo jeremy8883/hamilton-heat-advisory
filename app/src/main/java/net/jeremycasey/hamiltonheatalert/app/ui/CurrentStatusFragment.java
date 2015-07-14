@@ -27,7 +27,7 @@ import net.jeremycasey.hamiltonheatalert.app.gcm.MyGcmListenerService;
 import net.jeremycasey.hamiltonheatalert.app.gcm.RegistrationIntentService;
 import net.jeremycasey.hamiltonheatalert.app.heatstatus.HeatStatusNotifier;
 import net.jeremycasey.hamiltonheatalert.app.heatstatus.HeatStatusPreferenceLogger;
-import net.jeremycasey.hamiltonheatalert.app.utils.DateUtil;
+import net.jeremycasey.hamiltonheatalert.datetime.DateUtil;
 import net.jeremycasey.hamiltonheatalert.app.utils.PreferenceUtil;
 import net.jeremycasey.hamiltonheatalert.app.utils.RxUtil;
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatus;

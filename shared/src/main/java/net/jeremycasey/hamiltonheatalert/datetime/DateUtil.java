@@ -1,4 +1,4 @@
-package net.jeremycasey.hamiltonheatalert.app.utils;
+package net.jeremycasey.hamiltonheatalert.datetime;
 
 import org.joda.time.DateTime;
 
