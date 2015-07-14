@@ -1,5 +1,7 @@
 package net.jeremycasey.hamiltonheatalert.app.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -108,8 +110,18 @@ public class MainActivity extends ActionBarActivity implements FirstTimeSubscrib
             case R.id.menuDisclaimer:
                 showDisclaimer();
                 return true;
+            case R.id.menuWebsite:
+                openWebsite();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openWebsite() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(
+                getString(R.string.heat_alert_website)
+        ));
+        startActivity(browserIntent);
     }
 
     private void showDisclaimer() {
