@@ -5,6 +5,8 @@
 - Add disclaimer about everything works as is
 
 - Multiple topics to work based on dev or live - 30 mins
+-- Add server logging and notifications of failures
+- Add email notifications for server failures
 
 -- Publish to app store
 -- Publish to an aws instance
