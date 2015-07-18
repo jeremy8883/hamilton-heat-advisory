@@ -8,11 +8,23 @@ run {
     }
 }
 
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Hamilton Heat Status Polling Server',
+                'Implementation-Version': '1.0',
+                'Main-Class': 'net.jeremycasey.hamiltonheatalert.server.Server'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 dependencies {
     compile 'org.apache.commons:commons-io:1.3.2'
     compile 'org.json:json:20140107'
     compile 'com.google.code.gson:gson:2.3.1'
-    compile 'log4j:log4j:1.2.17'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
     compile project(':shared')
     testCompile 'junit:junit:4.12'
 }

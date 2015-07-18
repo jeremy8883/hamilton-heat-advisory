@@ -7,13 +7,15 @@ import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusIsImportantChecker
 import net.jeremycasey.hamiltonheatalert.heatstatus.HeatStatusLogger;
 import net.jeremycasey.hamiltonheatalert.heatstatus.ServerHeatStatusIsImportantChecker;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class Server {
-    final static Logger logger = Logger.getLogger(Server.class);
+    static Logger logger = LogManager.getLogger(Server.class.getName());
 
     public static void main(String[] args) {
         logger.info("Heat Alert server running...");
+        logger.error("This is one of these errors", new RuntimeException("Test"));
         if (args.length > 0) {
             int heatRating = Integer.parseInt(args[0]);
             sendManualMessageToGcm(heatRating);
