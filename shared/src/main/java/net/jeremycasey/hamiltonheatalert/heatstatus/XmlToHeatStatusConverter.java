@@ -66,6 +66,6 @@ public class XmlToHeatStatusConverter {
     }
 
     private static DateTime parseDate(String date) {
-        return DateTime.parse(date, DateTimeFormat.forPattern("M/dd/yyyy h:mm:ss a"));
+        return DateTime.parse(date, DateTimeFormat.forPattern("yyyy-MM-dd h:mm:ss a"));
     }
 }
