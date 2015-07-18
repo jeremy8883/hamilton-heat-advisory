@@ -36,6 +36,7 @@ public class XmlToHeatStatusConverter {
         ha.setStage(getStageIntFromStageText(ha.getStageText()));
         ha.setImageUrl(getValueOf(imageNodes, "url"));
         ha.setLastBuildDate(parseDate(getValueOf(doc.getChildNodes(), "lastBuildDate")).getMillis());
+        ha.setDescription(getValueOf(itemNodes, "description"));
 
         return ha;
     }

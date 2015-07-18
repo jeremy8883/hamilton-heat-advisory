@@ -12,7 +12,7 @@ public class HeatStatus implements Serializable {
     private String imageUrl;
     private long lastBuildDate;
     private long fetchDate;
-
+    private String description;
 
     public void setStageText(String stageText) {
         this.stageText = stageText;
@@ -46,7 +46,7 @@ public class HeatStatus implements Serializable {
         return lastBuildDate;
     }
 
-    public static HeatStatus createHeatAdvisory(int stage) {
+    public static HeatStatus createMockedHeatStatus(int stage) {
         HeatStatus heatStatus = new HeatStatus();
         String[] stageTexts = new String[] {
             "Monitoring", "Heat Advisory", "Heat Warning", "Extreme Heat Warning"
@@ -57,6 +57,7 @@ public class HeatStatus implements Serializable {
         long now = DateTime.now().getMillis();
         heatStatus.setLastBuildDate(now);
         heatStatus.setFetchDate(now);
+        heatStatus.setDescription("This is a sample description");
         return heatStatus;
     }
 
@@ -70,5 +71,13 @@ public class HeatStatus implements Serializable {
 
     public void setFetchDate(long fetchDate) {
         this.fetchDate = fetchDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

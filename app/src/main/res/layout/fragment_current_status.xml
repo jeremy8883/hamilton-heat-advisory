@@ -40,13 +40,22 @@
             android:layout_marginTop="@dimen/component_vertical_spacing"
             android:layout_centerHorizontal="true" />
 
+        <TextView android:text="" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/description"
+            android:textColor="@color/white"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/advisoryStatus"
+            android:layout_marginTop="8dp"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text=""
             android:id="@+id/lastChecked"
-            android:layout_below="@+id/advisoryStatus"
+            android:layout_below="@+id/description"
             android:gravity="center_horizontal"
             android:layout_marginTop="@dimen/component_vertical_spacing"
             android:layout_centerHorizontal="true"

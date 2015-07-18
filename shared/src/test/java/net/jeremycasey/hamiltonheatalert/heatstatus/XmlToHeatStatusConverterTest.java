@@ -38,8 +38,9 @@ public class XmlToHeatStatusConverterTest {
         heatStatus.setImageUrl("http://old.hamilton.ca/databases/phcs/heatalert/current1.jpg");
         heatStatus.setLastBuildDate(new DateTime(2015, 5, 19, 14, 52, 42).getMillis()); //TODO: what time zome is this?
         heatStatus.setFetchDate(fetchedHeatStatus.getFetchDate()); //We won't test the date
+        heatStatus.setDescription("Weather forecasts are being monitored for conditions that can be hazardous to health. ");
 
-        assertEquals(heatStatus, fetchedHeatStatus);
+        hsAssertEquals(heatStatus, fetchedHeatStatus);
     }
 
     @Test
@@ -68,7 +69,16 @@ public class XmlToHeatStatusConverterTest {
         heatStatus.setImageUrl("http://old.hamilton.ca/databases/phcs/heatalert/current1.jpg");
         heatStatus.setLastBuildDate(new DateTime(2015, 7, 17, 16, 18, 39).getMillis());
         heatStatus.setFetchDate(fetchedHeatStatus.getFetchDate()); //We won't test the date
+        heatStatus.setDescription("2 + days with 40 or greater humidex");
 
-        assertEquals(heatStatus, fetchedHeatStatus);
+        hsAssertEquals(heatStatus, fetchedHeatStatus);
+    }
+
+    private void hsAssertEquals(HeatStatus heatStatus, HeatStatus fetchedHeatStatus) {
+        assertEquals(heatStatus.getStage(), fetchedHeatStatus.getStage());
+        assertEquals(heatStatus.getStageText(), fetchedHeatStatus.getStageText());
+        assertEquals(heatStatus.getImageUrl(), fetchedHeatStatus.getImageUrl());
+        assertEquals(heatStatus.getLastBuildDate(), fetchedHeatStatus.getLastBuildDate());
+        assertEquals(heatStatus.getDescription(), fetchedHeatStatus.getDescription());
     }
 }

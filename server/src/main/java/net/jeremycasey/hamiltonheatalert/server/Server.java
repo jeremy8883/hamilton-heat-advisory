@@ -27,7 +27,7 @@ public class Server {
     private static void sendManualMessageToGcm(int heatRating) {
         try {
             System.out.println(heatRating);
-            HeatStatus heatStatus = HeatStatus.createHeatAdvisory(heatRating);
+            HeatStatus heatStatus = HeatStatus.createMockedHeatStatus(heatRating);
             logger.trace("Sending custom alert to gcm for \"" + heatStatus.getStageText() + "\"");
             new GcmSender(heatStatus).send();
             logger.info("Sent custom alert to gcm for \"" + heatStatus.getStageText() + "\"");

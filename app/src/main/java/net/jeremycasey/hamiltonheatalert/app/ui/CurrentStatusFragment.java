@@ -52,7 +52,8 @@ import rx.subscriptions.CompositeSubscription;
 public class CurrentStatusFragment extends Fragment {
     @Bind(R.id.advisoryStatus) TextView mAdvisoryStatus;
     @Bind(R.id.pushAlertsMessage) TextView mPushAlertsMessage;
-    @Bind(R.id.lastChecked) TextView mLastCheckedCheckBox;
+    @Bind(R.id.description) TextView mDescriptionTextView;
+    @Bind(R.id.lastChecked) TextView mLastCheckedTextView;
     @Bind(R.id.pushAlertsCheckBox) CheckBox mPushAlertsCheckBox;
     @Bind(R.id.heatStatusPanel) ViewGroup mHeatStatusPanel;
     private MenuItem mRefreshMenuItem = null;
@@ -312,11 +313,13 @@ public class CurrentStatusFragment extends Fragment {
     private void updateHeatStatusDisplay() {
         if (mHeatStatus == null) {
             mAdvisoryStatus.setText(R.string.advisory_status_checking);
-            mLastCheckedCheckBox.setText("");
+            mDescriptionTextView.setText("");
+            mLastCheckedTextView.setText("");
         } else {
             mAdvisoryStatus.setText(mHeatStatus.getStageText().replace(" - ", "\r\n"));
             String lastChecked = DateUtil.toRelativeString(mHeatStatus.getFetchDate());
-            mLastCheckedCheckBox.setText(
+            mDescriptionTextView.setText(mHeatStatus.getDescription());
+            mLastCheckedTextView.setText(
                     String.format(getActivity().getString(R.string.last_checked), lastChecked.toLowerCase())
             );
         }
