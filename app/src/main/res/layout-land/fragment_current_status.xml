@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/net.jeremycasey.hamiltonheatalert"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivityFragment"
+    android:background="@color/brand_col_1">
+
+    <TextView
+        android:id="@+id/pushAlertsMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal">
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:id="@+id/heatStatusPanel"
+            android:clickable="true">
+
+            <net.jeremycasey.hamiltonheatalert.app.ui.MeterView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/meter"
+                android:contentDescription="@string/advisory_status_checking"
+                custom:stage="-1"
+                android:layout_centerHorizontal="true"
+                />
+
+            <TextView android:text="" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/description"
+                android:textColor="@color/white"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/meter"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text=""
+                android:id="@+id/lastChecked"
+                android:layout_below="@+id/description"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/component_vertical_spacing"
+                android:layout_centerHorizontal="true"
+                android:alpha="0.6"
+                android:paddingBottom="@dimen/component_vertical_spacing"/>
+
+        </RelativeLayout>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"/>
+    </LinearLayout>
+
+
+
+    <CheckBox
+        android:id="@+id/pushAlertsCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/receive_push_notifications_checkbox"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

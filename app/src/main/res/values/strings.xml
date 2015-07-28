@@ -11,7 +11,7 @@
     <string name="alert_context_text">Hamilton Heat Alert</string>
     <string name="error_google_play_services_not_supported">Your device does not support push notifications.</string>
     <string name="receive_push_notifications_checkbox">Receive push notifications</string>
-    <string name="registering_for_push_notifications_now_please_wait">Registering for push notifications now. Please wait…</string>
+    <string name="registering_for_push_notifications_now_please_wait">Registering. Please wait…</string>
     <string name="push_alerts_registration_failed">There was a problem registering for push alerts</string>
     <string name="gcm_message_receive_error">There was a problem retreiving the latest heat warning</string>
     <string name="unregistering_push_notifications_please_wait">Unregistering. Please wait…</string>
