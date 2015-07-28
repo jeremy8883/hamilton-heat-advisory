@@ -9,11 +9,17 @@
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="%m%n"/>
         </Console>
+        <SMTP name="Mail"
+            subject="Hamilton Heat Alert Server Error Alert"
+            to="jeremy8883@gmail.com" from="noreply@jeremycasey.net"
+            smtpHost="localhost" smtpPort="25" bufferSize="50">
+        </SMTP>
     </Appenders>
     <Loggers>
         <Root level="trace">
             <AppenderRef ref="file" level="DEBUG"/>
             <AppenderRef ref="STDOUT" level="INFO"/>
+            <AppenderRef ref="Mail" level="ERROR"/>
         </Root>
     </Loggers>
 </Configuration>

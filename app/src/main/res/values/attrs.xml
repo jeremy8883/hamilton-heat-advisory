@@ -1,0 +1,5 @@
+<resources>
+    <declare-styleable name="MeterView">
+        <attr name="stage" format="integer" />
+    </declare-styleable>
+</resources>

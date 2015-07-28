@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/net.jeremycasey.hamiltonheatalert"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -30,15 +31,16 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
-        <TextView android:text="@string/advisory_status_checking" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/advisoryStatus"
-            android:textColor="@color/white"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:textSize="40sp"
-            android:gravity="center_horizontal"
+        <net.jeremycasey.hamiltonheatalert.app.ui.MeterView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/meter"
+            android:contentDescription="@string/advisory_status_checking"
+            custom:stage="-1"
             android:layout_below="@+id/textView"
             android:layout_marginTop="@dimen/component_vertical_spacing"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            />
 
         <TextView android:text="" android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/description"
@@ -46,7 +48,7 @@
             android:textAppearance="?android:textAppearanceLarge"
             android:gravity="center_horizontal"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/advisoryStatus"
+            android:layout_below="@+id/meter"
             android:layout_marginTop="8dp"/>
 
         <TextView

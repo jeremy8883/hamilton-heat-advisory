@@ -3,6 +3,7 @@ package net.jeremycasey.hamiltonheatalert.app.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -50,7 +51,7 @@ import rx.subscriptions.CompositeSubscription;
 
 
 public class CurrentStatusFragment extends Fragment {
-    @Bind(R.id.advisoryStatus) TextView mAdvisoryStatus;
+    @Bind(R.id.meter) MeterView mMeter;
     @Bind(R.id.pushAlertsMessage) TextView mPushAlertsMessage;
     @Bind(R.id.description) TextView mDescriptionTextView;
     @Bind(R.id.lastChecked) TextView mLastCheckedTextView;
@@ -300,23 +301,25 @@ public class CurrentStatusFragment extends Fragment {
             }
             mRefreshMenuItem.setEnabled(false);
         }
-        mHeatStatusPanel.setAlpha(0.4f);
+//        mHeatStatusPanel.setAlpha(0.4f);
     }
     private void displayAsNoLongerChecking() {
         if (mRefreshMenuItem != null) {
             mRefreshMenuItem.getActionView().findViewById(R.id.actionIcon).clearAnimation();
             mRefreshMenuItem.setEnabled(true);
         }
-        mHeatStatusPanel.setAlpha(1f);
+//        mHeatStatusPanel.setAlpha(1f);
     }
 
     private void updateHeatStatusDisplay() {
         if (mHeatStatus == null) {
-            mAdvisoryStatus.setText(R.string.advisory_status_checking);
-            mDescriptionTextView.setText("");
+            mMeter.setContentDescription(getString(R.string.advisory_status_checking));
+            mMeter.setStage(-1);
+            mDescriptionTextView.setText(R.string.advisory_status_checking);
             mLastCheckedTextView.setText("");
         } else {
-            mAdvisoryStatus.setText(mHeatStatus.getStageText().replace(" - ", "\r\n"));
+            mMeter.setContentDescription(mHeatStatus.getStageText());
+            mMeter.setStage(mHeatStatus.getStage());
             String lastChecked = DateUtil.toRelativeString(mHeatStatus.getFetchDate());
             mDescriptionTextView.setText(mHeatStatus.getDescription());
             mLastCheckedTextView.setText(
