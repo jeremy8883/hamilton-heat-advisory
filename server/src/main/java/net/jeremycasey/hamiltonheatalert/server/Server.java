@@ -15,7 +15,6 @@ public class Server {
 
     public static void main(String[] args) {
         logger.info("Heat Alert server running...");
-        logger.error("This is one of these errors", new RuntimeException("Test"));
         if (args.length > 0) {
             int heatRating = Integer.parseInt(args[0]);
             sendManualMessageToGcm(heatRating);
