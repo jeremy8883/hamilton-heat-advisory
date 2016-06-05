@@ -22,3 +22,4 @@ We use GCM for broadcasting alerts to all devices. Contact [Jeremy Casey](jeremy
 }
 ```
 
+The server is currently running on an EC2 instance. There's a cron job that runs the server app every 5 minutes. Contact [Jeremy Casey](jeremy8883@gmail.com) or [Matt Thompson](thompsmr@gmail.com) for access.
