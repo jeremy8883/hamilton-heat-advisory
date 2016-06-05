@@ -19,8 +19,10 @@ public class Server {
             int heatRating = Integer.parseInt(args[0]);
             sendManualMessageToGcm(heatRating);
         } else {
-            continuouslyCheckAlertStatusAndSendGcmMessageIfNecessary();
+//            continuouslyCheckAlertStatusAndSendGcmMessageIfNecessary();
+            checkAlertStatusAndSendGcmMessageIfNecessary();
         }
+        logger.info("...Heat Alert finished");
     }
 
     private static void sendManualMessageToGcm(int heatRating) {
@@ -39,28 +41,33 @@ public class Server {
         final int checkEveryMinutes = 5;
         logger.info("Watcher started. The hamilton heat alert rss feed will be checked every " + checkEveryMinutes + " minutes.");
         while (true) {
-            try {
-                HeatStatus heatStatus = new HeatStatusFetcher().run();
+            checkAlertStatusAndSendGcmMessageIfNecessary();
 
-                HeatStatusLogger heatStatusLogger = new HeatStatusFileLogger();
-                HeatStatusIsImportantChecker checker = new ServerHeatStatusIsImportantChecker(heatStatus.getStage(), new SystemTimeProvider());
-
-                if (checker.shouldNotify(heatStatusLogger)) {
-                    logger.trace("Sending alert to gcm for \"" + heatStatus.getStageText() + "\"");
-                    new GcmSender(heatStatus).send();
-                    heatStatusLogger.setLastNotifiedStatus(heatStatus);
-                    logger.info("Sent alert to gcm for \"" + heatStatus.getStageText() + "\"");
-                }
-                heatStatusLogger.setMostRecentStatus(heatStatus);
-            } catch (Exception ex) {
-                logger.error("There was an error on the heat alert server", ex);
-                ErrorNotifier.notify(ex);
-            }
             try {
                 Thread.sleep((long)(checkEveryMinutes * 1000 * 60));
             } catch (InterruptedException ex) {
                 logger.error("Sleep thread interrupted", ex);
             }
+        }
+    }
+
+    private static void checkAlertStatusAndSendGcmMessageIfNecessary() {
+        try {
+            HeatStatus heatStatus = new HeatStatusFetcher().run();
+
+            HeatStatusLogger heatStatusLogger = new HeatStatusFileLogger();
+            HeatStatusIsImportantChecker checker = new ServerHeatStatusIsImportantChecker(heatStatus.getStage(), new SystemTimeProvider());
+
+            if (checker.shouldNotify(heatStatusLogger)) {
+                logger.trace("Sending alert to gcm for \"" + heatStatus.getStageText() + "\"");
+                new GcmSender(heatStatus).send();
+                heatStatusLogger.setLastNotifiedStatus(heatStatus);
+                logger.info("Sent alert to gcm for \"" + heatStatus.getStageText() + "\"");
+            }
+            heatStatusLogger.setMostRecentStatus(heatStatus);
+        } catch (Exception ex) {
+            logger.error("There was an error on the heat alert server", ex);
+            ErrorNotifier.notify(ex);
         }
     }
 }
