@@ -67,7 +67,6 @@ public class Server {
             heatStatusLogger.setMostRecentStatus(heatStatus);
         } catch (Exception ex) {
             logger.error("There was an error on the heat alert server", ex);
-            ErrorNotifier.notify(ex);
         }
     }
 }
