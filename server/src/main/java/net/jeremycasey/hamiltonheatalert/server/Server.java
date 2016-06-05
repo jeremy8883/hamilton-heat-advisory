@@ -59,7 +59,7 @@ public class Server {
             HeatStatusIsImportantChecker checker = new ServerHeatStatusIsImportantChecker(heatStatus.getStage(), new SystemTimeProvider());
 
             if (checker.shouldNotify(heatStatusLogger)) {
-                logger.trace("Sending alert to gcm for \"" + heatStatus.getStageText() + "\"");
+                logger.info("Sending alert to gcm for \"" + heatStatus.getStageText() + "\"");
                 new GcmSender(heatStatus).send();
                 heatStatusLogger.setLastNotifiedStatus(heatStatus);
                 logger.info("Sent alert to gcm for \"" + heatStatus.getStageText() + "\"");
