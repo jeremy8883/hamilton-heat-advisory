@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "net.jeremycasey.hamiltonheatalert"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
-        versionName "0.1"
+        versionName "0.2"
     }
     buildTypes {
         release {
@@ -18,15 +18,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    packagingOptions {
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'joda-time:joda-time:2.8.1'
     compile 'com.google.android.gms:play-services:7.5.+'
@@ -37,5 +38,4 @@ dependencies {
         exclude group: 'com.google.android', module: 'support-v4'
     }
     compile project(':shared')
-    testCompile 'junit:junit:4.12'
 }
