@@ -65,8 +65,8 @@ public class XmlToHeatStatusConverter {
     private static int getStageIntFromStageText(String text) {
         return Integer.parseInt(text.substring(text.lastIndexOf(" ") + 1));
     }
-
+//Sat, 18 Jun 2016 16:16:10 EST
     private static DateTime parseDate(String date) {
-        return DateTime.parse(date, DateTimeFormat.forPattern("yyyy-MM-dd h:mm:ss a"));
+        return DateTime.parse(date, DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss z"));
     }
 }
